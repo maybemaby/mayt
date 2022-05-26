@@ -9,3 +9,62 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Video {
+  id            String          @id @unique @default(uuid())
+  name          String
+  ytId          String
+  length        Int
+  addedAt       DateTime        @default(now())
+  pinned        Boolean
+  videoPlaylist VideoPlaylist[]
+  channel       Channel?        @relation(fields: [channelId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  channelId     String?
+
+  @@map("videos")
+}
+
+model Channel {
+  id     String  @id @unique @default(uuid())
+  ytId   String
+  videos Video[]
+
+  @@map("channels")
+}
+
+model Playlist {
+  id            String          @id @unique @default(uuid())
+  createdAt     DateTime        @default(now())
+  videoPlaylist VideoPlaylist[]
+
+  @@map("playlists")
+}
+
+model VideoPlaylist {
+  videoId    String
+  video      Video    @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([videoId, playlistId])
+  @@map("video_playlist")
+}
+
+model TagType {
+  id   String @id @unique @default(uuid())
+  name String
+  tags Tag[]
+
+  @@index([name])
+  @@map("tagtypes")
+}
+
+model Tag {
+  id     String   @id @unique @default(uuid())
+  name   String
+  type   TagType? @relation(fields: [typeId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  typeId String?
+
+  @@index([typeId, name])
+  @@map("tags")
+}
