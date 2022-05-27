@@ -1,4 +1,5 @@
 import { boolean, InferType, number, object, string } from "yup";
+import { postChannelSchema } from "./Channel";
 
 const postVideoSchema = object({
   name: string().required(),
@@ -9,6 +10,7 @@ const postVideoSchema = object({
   thumbnailUrl: string().optional().default(undefined),
   thumbnailHeight: number().optional().default(undefined),
   thumbnailWidth: number().optional().default(undefined),
+  channel: postChannelSchema,
 });
 
 export type PostVideoDto = InferType<typeof postVideoSchema>;

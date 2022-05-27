@@ -12,7 +12,26 @@ type FindVideoOptions = FindOptions & {
 
 async function createVideo(dto: PostVideoDto) {
   return await db.video.create({
-    data: { ...dto },
+    data: {
+      name: dto.name,
+      pinned: dto.pinned,
+      ytId: dto.ytId,
+      length: dto.length,
+      thumbnail_height: dto.thumbnailHeight,
+      thumbnail_url: dto.thumbnailUrl,
+      thumbnail_width: dto.thumbnailWidth,
+      channel: {
+        connectOrCreate: {
+          create: {
+            name: dto.channel.name,
+            url: dto.channel.url,
+          },
+          where: {
+            name: dto.channel.name,
+          },
+        },
+      },
+    },
     include: {
       channel: true,
     },

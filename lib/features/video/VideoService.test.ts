@@ -115,14 +115,25 @@ describe("VideoService", () => {
       thumbnailUrl: undefined,
       thumbnailHeight: undefined,
       thumbnailWidth: undefined,
+      channel: {
+        name: "channelCreate",
+        url: "https://youtube.com/channelCreate",
+      },
+    });
+
+    const channel = await db.channel.findUnique({
+      where: {
+        name: "channelCreate",
+      },
     });
 
     expect(res).toBeTruthy();
+    expect(channel).toBeTruthy();
     expect(res.length).toBe(2000);
     expect(res.pinned).toBe(false);
     expect(res.name).toBe("test.mp4");
-    expect(res.channelId).toBe(null);
-    expect(res.channel).toBe(null);
+    expect(res.channelId).toBeTruthy();
+    expect(res.channel).toHaveProperty("url");
   });
 
   test("Should delete", async () => {

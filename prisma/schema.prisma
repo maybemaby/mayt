@@ -31,7 +31,7 @@ model Video {
 model Channel {
   id     String  @id @unique @default(uuid())
   url    String
-  name   String
+  name   String  @unique
   videos Video[]
 
   @@map("channels")
