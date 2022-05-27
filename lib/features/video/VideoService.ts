@@ -7,6 +7,7 @@ type FindVideoOptions = FindOptions & {
   orderBy?: {
     addedAt: "desc" | "asc";
   };
+  matchingTags?: string[];
 };
 
 async function createVideo(dto: PostVideoDto) {
@@ -27,24 +28,7 @@ async function deleteVideo(id: string) {
 }
 
 async function findVideos(options: FindVideoOptions) {
-  if (options.cursor) {
-    return await db.video.findMany({
-      cursor: {
-        id: options.cursor || undefined,
-      },
-      take: options.size || 20,
-      where: {
-        channelId: options.channelId,
-      },
-      orderBy: {
-        addedAt: options.orderBy?.addedAt || "desc",
-      },
-      include: {
-        channel: true,
-      },
-    });
-  }
-  return await db.video.findMany({
+  const params: Parameters<typeof db.video.findMany>[0] = {
     take: options.size || 20,
     where: {
       channelId: options.channelId,
@@ -52,8 +36,58 @@ async function findVideos(options: FindVideoOptions) {
     orderBy: {
       addedAt: options.orderBy?.addedAt || "desc",
     },
+  };
+
+  if (options.cursor) {
+    params.cursor = {
+      id: options.cursor,
+    };
+  }
+
+  if (options.matchingTags && params.where) {
+    params.where.VideoTag = {
+      some: {
+        tag: {
+          name: {
+            in: options.matchingTags,
+          },
+        },
+      },
+    };
+  }
+
+  if (options.cursor) {
+    return await db.video.findMany({
+      ...params,
+      include: {
+        channel: true,
+        VideoTag: {
+          include: {
+            tag: {
+              select: {
+                name: true,
+                type: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+  return await db.video.findMany({
+    ...params,
     include: {
       channel: true,
+      VideoTag: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+              type: true,
+            },
+          },
+        },
+      },
     },
   });
 }

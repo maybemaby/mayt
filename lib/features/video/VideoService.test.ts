@@ -1,5 +1,39 @@
 import VideoService from "./VideoService";
 import db from "../../data";
+import { Tag } from "@prisma/client";
+
+let happy: Tag;
+let sad: Tag;
+let lazy: Tag;
+
+beforeAll(async () => {
+  const moods = await db.tagType.create({
+    data: {
+      name: "mood",
+    },
+  });
+
+  happy = await db.tag.create({
+    data: {
+      name: "happy",
+      typeId: moods.id,
+    },
+  });
+
+  sad = await db.tag.create({
+    data: {
+      name: "sad",
+      typeId: moods.id,
+    },
+  });
+
+  lazy = await db.tag.create({
+    data: {
+      name: "lazy",
+      typeId: moods.id,
+    },
+  });
+});
 
 beforeEach(async () => {
   const latest = new Date();
@@ -28,6 +62,39 @@ beforeEach(async () => {
         pinned: false,
         addedAt: earliest,
         ytId: "124asasd2",
+      },
+    ],
+  });
+
+  const video1 = (
+    await db.video.findFirst({
+      where: {
+        name: { contains: "seed 1" },
+      },
+    })
+  )?.id;
+
+  const video2 = (
+    await db.video.findFirst({
+      where: {
+        name: { contains: "seed 2" },
+      },
+    })
+  )?.id;
+
+  await db.videoTag.createMany({
+    data: [
+      {
+        tagId: happy.id,
+        videoId: video1 as string,
+      },
+      {
+        tagId: sad.id,
+        videoId: video1 as string,
+      },
+      {
+        tagId: lazy.id,
+        videoId: video2 as string,
       },
     ],
   });
@@ -102,5 +169,24 @@ describe("VideoService", () => {
     });
 
     expect(found.length).toBe(1);
+  });
+
+  test("Should return tagged", async () => {
+    const found = await VideoService.findVideos({ matchingTags: ["happy"] });
+    const foundAll = await VideoService.findVideos({
+      matchingTags: ["happy", "sad", "lazy"],
+    });
+    expect(found.length).toBe(1);
+    expect(found[0].name).toBe("seed 1");
+    expect(foundAll.length).toBe(2);
+    expect(foundAll[0].addedAt > foundAll[1].addedAt).toBeTruthy();
+  });
+
+  test("Should not return untagged", async () => {
+    const found = await VideoService.findVideos({
+      matchingTags: ["nonexistent"],
+    });
+
+    expect(found.length).toBe(0);
   });
 });
