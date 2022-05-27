@@ -3,17 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev:db-up": "docker run --name maytdb -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=maytdb -p 5432:5432 postgres",
+    "dev:db-push": "dotenv -e .env.dev -- prisma db push",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "dotenv -e .env.dev -- jest --watch"
   },
   "dependencies": {
+    "@prisma/client": "^3.14.0",
+    "dotenv-cli": "^5.1.0",
     "next": "12.1.6",
     "prisma": "^3.14.0",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -25,6 +30,7 @@
     "eslint-config-next": "12.1.6",
     "eslint-plugin-testing-library": "^5.5.1",
     "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "prettier": "^2.6.2",
     "typescript": "4.7.2"
   }
