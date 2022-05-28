@@ -1,7 +1,7 @@
 import { boolean, InferType, number, object, string } from "yup";
 import { postChannelSchema } from "./Channel";
 
-const postVideoSchema = object({
+export const postVideoSchema = object({
   name: string().required(),
   ytId: string().required(),
   length: number().optional().default(undefined),
@@ -14,3 +14,14 @@ const postVideoSchema = object({
 });
 
 export type PostVideoDto = InferType<typeof postVideoSchema>;
+export type GetVideoDto = {
+  id: string;
+  name: string;
+  ytId: string;
+  length?: number;
+  pinned: boolean;
+  channelId?: string;
+  thumbnailUrl?: string;
+  thumbnailHeight?: string;
+  thumbnailWidth?: string;
+};
