@@ -3,7 +3,6 @@ import handler from "../../../../pages/api/videos";
 import { NextApiRequest, NextApiResponse } from "next";
 import { GetVideoDto, PostVideoDto } from "../models/Video";
 import db from "../../../data";
-import { channel } from "diagnostics_channel";
 
 afterAll(async () => {
   const video = await db.video.findFirst({
