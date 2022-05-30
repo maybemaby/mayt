@@ -67,6 +67,7 @@ async function findVideos(options: FindVideoOptions) {
     params.cursor = {
       id: options.cursor,
     };
+    params.skip = 1;
   }
 
   if (options.matchingTags && params.where) {

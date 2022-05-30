@@ -104,6 +104,10 @@ afterEach(async () => {
   await db.video.deleteMany({});
 });
 
+afterAll(async () => {
+  await db.tag.deleteMany({});
+});
+
 describe("VideoService", () => {
   test("Should create", async () => {
     const res = await VideoService.createVideo({
