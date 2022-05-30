@@ -10,6 +10,9 @@ export default async function handler(
     case "POST":
       await VideoController.PostVideo(req, res);
       break;
+    case "GET":
+      await VideoController.GetVideo(req, res);
+      break;
     default:
       res.status(405).send("Method not supported");
   }
