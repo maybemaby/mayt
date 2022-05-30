@@ -200,4 +200,31 @@ describe("VideoService", () => {
 
     expect(found.length).toBe(0);
   });
+
+  test("Should add tag", async () => {
+    const created = await db.video.create({
+      data: {
+        name: "Attach Tag",
+        pinned: false,
+        ytId: "testattach12as",
+      },
+    });
+
+    await VideoService.addTag(created.id, happy.id);
+
+    const video = await db.video.findUnique({
+      where: {
+        id: created.id,
+      },
+      include: {
+        VideoTag: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+
+    expect(video?.VideoTag[0].tag.name).toBe("happy");
+  });
 });

@@ -10,6 +10,12 @@ type FindVideoOptions = FindOptions & {
   matchingTags?: string[];
 };
 
+/**
+ * Inserts new Video record to table. If channel in body does not exist based on name as key,
+ * creates it and then references it.
+ * @param dto PostVideoDto Body to create new Video record
+ * @returns
+ */
 async function createVideo(dto: PostVideoDto) {
   return await db.video.create({
     data: {
@@ -111,10 +117,20 @@ async function findVideos(options: FindVideoOptions) {
   });
 }
 
+async function addTag(videoId: string, tagId: string) {
+  return await db.videoTag.create({
+    data: {
+      tagId: tagId,
+      videoId: videoId,
+    },
+  });
+}
+
 const VideoService = {
   createVideo,
   deleteVideo,
   findVideos,
+  addTag,
 };
 
 export default VideoService;
