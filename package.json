@@ -5,7 +5,8 @@
   "scripts": {
     "dev:db-up": "docker run --name maytdb -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=maytdb -p 5432:5432 postgres",
     "dev:db-push": "dotenv -e .env.dev -- prisma db push",
-    "dev": "next dev",
+    "dev": "dotenv -e .env.staging -- next dev",
+    "stage:db-migrate": "dotenv -e .env.staging -- prisma migrate deploy",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
