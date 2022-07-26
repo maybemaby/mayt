@@ -12,10 +12,10 @@
     "test": "dotenv -e .env.dev -- jest --watch"
   },
   "dependencies": {
-    "@prisma/client": "^3.14.0",
+    "@prisma/client": "^4.1.0",
     "dotenv-cli": "^5.1.0",
     "next": "12.1.6",
-    "prisma": "^3.14.0",
+    "prisma": "^4.1.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "yup": "^0.32.11"
