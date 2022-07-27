@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { lightTheme } from "../theme";
+import { WithSidebar } from "../components/layouts/WithSidebar";
 
 const GlobalStyle = createGlobalStyle`
 html,
@@ -24,7 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <GlobalStyle />
       <ThemeProvider theme={lightTheme}>
-        <Component {...pageProps} />
+        <WithSidebar>
+          <Component {...pageProps} />
+        </WithSidebar>
       </ThemeProvider>
     </>
   );

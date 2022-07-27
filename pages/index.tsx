@@ -1,6 +1,7 @@
 import { Video } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import { BaseSidebar } from "../components/common/BaseSidebar";
 import VideoService from "../lib/features/video/VideoService";
 
 type HomeProps = {
@@ -16,6 +17,7 @@ const Home: NextPage<HomeProps> = ({ pinnedVideos, latestVideos }) => {
         <meta name="description" content="Your personal Youtube organizer" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <BaseSidebar>Test</BaseSidebar>
       Hello World
     </div>
   );
