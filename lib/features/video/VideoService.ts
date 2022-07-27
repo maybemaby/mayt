@@ -118,6 +118,18 @@ async function findVideos(options: FindVideoOptions) {
   });
 }
 
+async function getPinned(size: number) {
+  return await db.video.findMany({
+    where: {
+      pinned: true,
+    },
+    include: {
+      channel: true,
+    },
+    take: size,
+  });
+}
+
 async function addTag(videoId: string, tagId: string) {
   return await db.videoTag.create({
     data: {
@@ -132,6 +144,7 @@ const VideoService = {
   deleteVideo,
   findVideos,
   addTag,
+  getPinned,
 };
 
 export default VideoService;

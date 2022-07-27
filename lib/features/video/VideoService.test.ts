@@ -231,4 +231,20 @@ describe("VideoService", () => {
 
     expect(video?.VideoTag[0].tag.name).toBe("happy");
   });
+
+  test("Should return only pinned", async () => {
+    const pinned = await db.video.create({
+      data: {
+        name: "Pinned Video",
+        pinned: true,
+        ytId: "Asad12312",
+      },
+    });
+
+    const res = await VideoService.getPinned(10);
+
+    expect(res.length).toBe(1);
+    expect(res[0].name).toBe("Pinned Video");
+    expect(res[0].pinned).toBe(true);
+  });
 });
