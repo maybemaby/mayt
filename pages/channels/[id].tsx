@@ -19,6 +19,10 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ videos, channel }) => {
 
   return (
     <main>
+      <div>{channel.name}</div>
+      <a href={channel.url} target="_blank" rel="noreferrer">
+        Channel Link
+      </a>
       {videos.length > 0 ? (
         videos.map((video) => {
           return <div key={video.id}>{JSON.stringify(video)}</div>;
