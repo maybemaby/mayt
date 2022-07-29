@@ -17,7 +17,6 @@ const Home: NextPage<HomeProps> = ({ pinnedVideos, latestVideos }) => {
         <meta name="description" content="Your personal Youtube organizer" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <BaseSidebar>Test</BaseSidebar>
       Hello World
     </div>
   );
