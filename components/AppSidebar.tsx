@@ -42,16 +42,6 @@ const SidebarBottom = styled.div`
   }
 `;
 
-const CloseIcon = styled(BsArrowBarLeft)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-
-  @media screen and (min-width: 768px) {
-    display: none;
-  }
-`;
-
 export const AppSidebar = ({
   forceShow,
   onClose,
@@ -66,12 +56,8 @@ export const AppSidebar = ({
       }}
       zIndex={10}
       forceShow={forceShow}
+      onClose={onClose}
     >
-      {forceShow && (
-        <IconButton onClick={onClose}>
-          <CloseIcon size={25} />
-        </IconButton>
-      )}
       <h1>Mayt</h1>
       <SidebarList>
         <SidebarItem>

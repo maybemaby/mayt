@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import { BsArrowBarLeft } from "react-icons/bs";
 import styled, { keyframes, css } from "styled-components";
 import { CommonStyle } from "../../lib/types/CommonStyle";
+import { IconButton } from "./IconButton";
 
 type BaseSidebarProps = {
   passStyle?: CommonStyle;
   children: React.ReactNode;
   zIndex?: number;
   forceShow: boolean;
+  onClose(e?: React.MouseEvent): void;
 };
 
 const slideRight = keyframes`
   0% {
+    opacity: 0;
     transform: translateX(-100%);
   }
   100% {
+    opacity: 1;
     transform: translateX(0%);
   }
 `;
 
+const exitLeft = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+`;
+
 const Container = styled.div<
-  CommonStyle & { zIndex?: number; forceShow: boolean }
+  CommonStyle & { zIndex?: number; forceShow: boolean; closing: boolean }
 >`
   flex-direction: column;
   color: ${(props) => props.color ?? props.theme.color.primary[500]};
@@ -37,7 +52,11 @@ const Container = styled.div<
   min-width: 200px;
   width: fit-content;
   animation: ${(props) =>
-    props.forceShow
+    props.closing
+      ? css`
+          ${exitLeft} 400ms ease
+        `
+      : props.forceShow
       ? css`
           ${slideRight} 200ms ease
         `
@@ -48,14 +67,45 @@ const Container = styled.div<
   }
 `;
 
+const CloseIcon = styled(BsArrowBarLeft)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
 export const BaseSidebar = ({
   passStyle,
   children,
   zIndex,
+  onClose,
   forceShow = false,
 }: BaseSidebarProps) => {
+  const [closing, setClosing] = useState(false);
+
+  const handleClosing = () => {
+    setClosing(true);
+    setTimeout(() => {
+      onClose();
+      setClosing(false);
+    }, 200);
+  };
+
   return (
-    <Container {...passStyle} zIndex={zIndex} forceShow={forceShow}>
+    <Container
+      {...passStyle}
+      zIndex={zIndex}
+      forceShow={forceShow}
+      closing={closing}
+    >
+      {forceShow && (
+        <IconButton onClick={handleClosing}>
+          <CloseIcon size={25} />
+        </IconButton>
+      )}
       {children}
     </Container>
   );
