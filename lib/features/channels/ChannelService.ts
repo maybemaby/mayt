@@ -1,4 +1,5 @@
 import db from "../../data";
+import type { PostChannelDto } from "../video/models/Channel";
 
 /**
  *
@@ -13,8 +14,24 @@ async function findChannel(id: string) {
   });
 }
 
+async function createOrUpdateChannel(dto: PostChannelDto) {
+  return await db.channel.upsert({
+    where: {
+      name: dto.name,
+    },
+    create: {
+      name: dto.name,
+      url: dto.url,
+    },
+    update: {
+      url: dto.url,
+    },
+  });
+}
+
 const ChannelService = {
   findChannel,
+  createOrUpdateChannel,
 };
 
 export default ChannelService;
