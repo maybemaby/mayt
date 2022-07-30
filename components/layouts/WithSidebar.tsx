@@ -11,9 +11,11 @@ const Main = styled.main`
   margin-left: 0;
   /* margin-top: 100px; */
   transition: all 200ms ease;
+  display: flex;
+  flex-direction: column;
 
   @media screen and (min-width: 768px) {
-    margin-left: 200px;
+    margin-left: 210px;
     margin-top: 0px;
   }
 `;

@@ -107,7 +107,7 @@ export const AppSidebar = ({
           </Link>
         </SidebarItem>
         <SidebarItem>
-          <Link href="/videos/new">
+          <Link href="/videos/add">
             <a>
               <BsPlusLg size={20} style={{ marginLeft: "6px" }} />
               Add Videos

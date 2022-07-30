@@ -33,7 +33,7 @@ const exitLeft = keyframes`
   }
 `;
 
-const Container = styled.div<
+const Container = styled.nav<
   CommonStyle & { zIndex?: number; forceShow: boolean; closing: boolean }
 >`
   flex-direction: column;
