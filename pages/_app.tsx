@@ -8,9 +8,19 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Fira Sans ,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: 'Poppins', Fira Sans ,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Droid Sans, Helvetica Neue, sans-serif;
   overflow: auto;
+}
+
+h1 {
+  font-weight: 600;
+
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 * {
