@@ -3,4 +3,6 @@ export type CommonStyle = {
   color?: string;
   padding?: string;
   margin?: string;
+  borderRadius?: string;
+  width?: string;
 };
