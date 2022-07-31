@@ -16,7 +16,7 @@ model Video {
   thumbnail_height Int?
   thumbnail_width  Int?
   addedAt          DateTime        @default(now())
-  pinned           Boolean
+  pinned           Boolean?        @default(false)
   channelId        String?
   channel          Channel?        @relation(fields: [channelId], references: [id])
   VideoTag         VideoTag[]
