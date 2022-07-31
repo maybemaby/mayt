@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { lightTheme } from "../theme";
 import { WithSidebar } from "../components/layouts/WithSidebar";
 
@@ -15,7 +16,13 @@ body {
 
 h1 {
   font-weight: 600;
+  font-size: 1.5rem;
+}
 
+h2 {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: ${(props) => props.theme.color.primary[300]}
 }
 
 a {
@@ -32,14 +39,18 @@ div#__next {
 }
 `;
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyle />
       <ThemeProvider theme={lightTheme}>
-        <WithSidebar>
-          <Component {...pageProps} />
-        </WithSidebar>
+        <GlobalStyle />
+        <QueryClientProvider client={queryClient}>
+          <WithSidebar>
+            <Component {...pageProps} />
+          </WithSidebar>
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );
