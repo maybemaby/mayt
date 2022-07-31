@@ -35,7 +35,8 @@ const SidebarItem = styled.li`
       left / var(--p, 0) no-repeat;
   }
 
-  a:hover {
+  a:hover,
+  a:focus {
     --p: 100%;
     background-position: right;
   }
@@ -63,7 +64,8 @@ const SidebarBottom = styled.div`
     transition: color 400ms ease;
   }
 
-  a:hover {
+  a:hover,
+  a:focus {
     color: ${(props) => props.theme.color.grey[700]};
   }
 `;

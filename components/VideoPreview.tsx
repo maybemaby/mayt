@@ -37,14 +37,12 @@ const Container = styled.div`
 
 const Info = styled.div`
   width: 90%;
-  aspect-ratio: 4/3;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  
+
   @media screen and (min-width: 512px) {
     width: 480px;
-    height: 360px;
   }
 `;
 
