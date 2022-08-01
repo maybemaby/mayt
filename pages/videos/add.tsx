@@ -18,7 +18,7 @@ const ReplySection = styled.section`
   display: flex;
   flex-direction: row;
   width: 90%;
-  margin: auto;
+  margin: 0px auto;
   gap: 20px;
   align-items: center;
 

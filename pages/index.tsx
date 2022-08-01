@@ -1,19 +1,46 @@
-import { Video } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import styled from "styled-components";
+import { TbPinned, TbTrendingUp } from "react-icons/tb";
 import { SearchBox } from "../components/SearchBox";
+import IconHeader from "../components/common/IconHeader";
+import VideoPreviewRow from "../components/VideoPreviewRow";
 import VideoService from "../lib/features/video/VideoService";
 import type { AsyncReturnType } from "../lib/types/AsyncReturnType";
 import type { Unpacked } from "../lib/types/Unpacked";
 
-type HomeProps = {
+export type HomeProps = {
   pinnedVideos: AsyncReturnType<typeof VideoService["getPinned"]>;
   latestVideos: (Omit<
     Unpacked<AsyncReturnType<typeof VideoService["findVideos"]>>,
     "addedAt"
   > & { addedAt: string })[];
 };
+
+const PinnedContent = styled.div`
+  width: 100%;
+  padding: 40px 20px 10px 0px;
+  background-color: #fcc97693;
+  transform: translateY(-12.5%);
+  z-index: 1;
+  min-height: 300px;
+`;
+
+const SecondaryContent = styled.div`
+  width: 100%;
+  padding: 40px 20px 10px 0px;
+`;
+
+const StyledIconHeader = styled(IconHeader)`
+  margin: 0px auto;
+  width: 80%;
+
+  @media screen and (min-width: 768px) {
+    margin-left: 80px;
+    width: 100%;
+  }
+`;
 
 const Home: NextPage<HomeProps> = ({ pinnedVideos, latestVideos }) => {
   const [searchLoading, setSearchLoading] = useState(false);
@@ -43,7 +70,18 @@ const Home: NextPage<HomeProps> = ({ pinnedVideos, latestVideos }) => {
         delay={300}
         loading={searchLoading}
       />
-      <div>{JSON.stringify(latestVideos)}</div>
+      <PinnedContent>
+        <StyledIconHeader Icon={TbPinned} iconProps={{ size: 25 }}>
+          Pinned
+        </StyledIconHeader>
+        <VideoPreviewRow videos={pinnedVideos} id={"Pinned"} wrap={false} />
+      </PinnedContent>
+      <SecondaryContent>
+        <StyledIconHeader Icon={TbTrendingUp} iconProps={{ size: 25 }}>
+          Recently Added
+        </StyledIconHeader>
+        <VideoPreviewRow videos={latestVideos} id={"latest"} wrap={false} />
+      </SecondaryContent>
     </>
   );
 };

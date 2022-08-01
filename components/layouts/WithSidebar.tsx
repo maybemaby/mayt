@@ -13,9 +13,11 @@ const Main = styled.main`
   transition: all 200ms ease;
   display: flex;
   flex-direction: column;
+  min-height: 90vh;
+  overflow-x: hidden;
 
   @media screen and (min-width: 768px) {
-    margin-left: 210px;
+    margin-left: 205px;
     margin-top: 0px;
   }
 `;
