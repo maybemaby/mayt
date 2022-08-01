@@ -48,9 +48,12 @@ export const getServerSideProps: GetServerSideProps<ChannelPageProps> = async (
 
   if (id && typeof id === "string") {
     const channel = await ChannelService.findChannel(id);
-    const videos = await VideoService.findVideos({
+    let videos = await VideoService.findVideos({
       channelId: id,
     });
+
+    videos = JSON.parse(JSON.stringify(videos));
+
     return {
       props: {
         videos,
