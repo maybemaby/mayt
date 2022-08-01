@@ -22,6 +22,7 @@ const OuterContainer = styled.div<CommonStyle>`
   color: ${(props) => props.color};
   background-color: ${(props) => props.backgroundColor};
   max-height: 60px;
+  z-index: 2;
 `;
 
 const Input = styled(BaseTextInput)`
@@ -52,7 +53,8 @@ const ResultBox = styled.div`
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
   animation: ${expandVert} 300ms ease;
-  z-index: 10;
+  z-index: 2;
+  background-color: white;
 
   ul {
     padding: 0;
