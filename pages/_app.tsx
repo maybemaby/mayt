@@ -3,6 +3,8 @@ import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { lightTheme } from "../theme";
 import { WithSidebar } from "../components/layouts/WithSidebar";
+import { withTRPC } from "@trpc/next";
+import { AppRouter } from "./api/trpc/[trpc]";
 
 const GlobalStyle = createGlobalStyle`
 html,
@@ -57,4 +59,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default withTRPC<AppRouter>({
+  config({ ctx }) {
+    const url = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/trpc`
+      : "http://localhost:3000/api/trpc";
+
+    return { url };
+  },
+  ssr: true,
+})(MyApp);
