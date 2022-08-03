@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import styled from "styled-components";
@@ -6,9 +6,6 @@ import { TbPinned, TbTrendingUp } from "react-icons/tb";
 import { SearchBox } from "../components/SearchBox";
 import IconHeader from "../components/common/IconHeader";
 import VideoPreviewRow from "../components/VideoPreviewRow";
-import VideoService from "../lib/features/video/VideoService";
-import type { AsyncReturnType } from "../lib/types/AsyncReturnType";
-import type { Unpacked } from "../lib/types/Unpacked";
 import { trpc } from "../lib/utils/trpc";
 
 // export type HomeProps = {
