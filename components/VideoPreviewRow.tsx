@@ -48,7 +48,7 @@ type VideoPreviewRowProps<TVideo extends VideoLike> = {
   id: string;
   videos: TVideo[];
   commonStyle?: CommonStyle;
-  wrap?: boolean;
+  flexWrap?: boolean;
 };
 
 function VideoPreviewRow<T extends VideoLike>({
