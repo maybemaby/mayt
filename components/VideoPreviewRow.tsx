@@ -16,7 +16,7 @@ const Section = styled.section<CommonStyle>`
   }
 `;
 
-const Row = styled.div<{ wrap?: boolean }>`
+const Row = styled.div<{ flexWrap?: boolean }>`
   margin: auto;
   display: flex;
   flex-direction: row;
@@ -25,7 +25,7 @@ const Row = styled.div<{ wrap?: boolean }>`
   max-width: 100%;
   gap: 20px;
   overflow-x: auto;
-  flex-wrap: ${(props) => (props.wrap ? "wrap" : "nowrap")};
+  flex-wrap: ${(props) => (props.flexWrap ? "wrap" : "nowrap")};
 
   @media screen and (min-width: 768px) {
     margin: 0px;
@@ -48,19 +48,19 @@ type VideoPreviewRowProps<TVideo extends VideoLike> = {
   id: string;
   videos: TVideo[];
   commonStyle?: CommonStyle;
-  wrap?: boolean;
+  flexWrap?: boolean;
 };
 
 function VideoPreviewRow<T extends VideoLike>({
   id,
   videos,
   commonStyle,
-  wrap,
+  flexWrap,
 }: VideoPreviewRowProps<T>) {
   return (
     <Section id={id} {...commonStyle}>
       {videos.length === 0 && <div>No Videos Found</div>}
-      <Row wrap={wrap}>
+      <Row flexWrap={flexWrap}>
         {videos.map((video) => (
           <SmallVideoPreview
             key={video.id}

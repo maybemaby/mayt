@@ -74,13 +74,13 @@ const Home: NextPage<HomeProps> = ({ pinnedVideos, latestVideos }) => {
         <StyledIconHeader Icon={TbPinned} iconProps={{ size: 25 }}>
           Pinned
         </StyledIconHeader>
-        <VideoPreviewRow videos={pinnedVideos} id={"Pinned"} wrap={false} />
+        <VideoPreviewRow videos={pinnedVideos} id={"Pinned"} flexWrap={false} />
       </PinnedContent>
       <SecondaryContent>
         <StyledIconHeader Icon={TbTrendingUp} iconProps={{ size: 25 }}>
           Recently Added
         </StyledIconHeader>
-        <VideoPreviewRow videos={latestVideos} id={"latest"} wrap={false} />
+        <VideoPreviewRow videos={latestVideos} id={"latest"} flexWrap={false} />
       </SecondaryContent>
     </>
   );
