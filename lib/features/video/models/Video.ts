@@ -1,19 +1,20 @@
-import { boolean, InferType, number, object, string } from "yup";
+import { z } from "zod";
 import { postChannelSchema } from "./Channel";
 
-export const postVideoSchema = object({
-  name: string().required(),
-  ytId: string().required(),
-  length: number().optional().default(undefined),
-  pinned: boolean().optional().default(false),
-  channelId: string().optional().default(undefined),
-  thumbnailUrl: string().optional().default(undefined),
-  thumbnailHeight: number().optional().default(undefined),
-  thumbnailWidth: number().optional().default(undefined),
+export const postVideoSchema = z.object({
+  name: z.string(),
+  ytId: z.string(),
+  length: z.number().int().optional(),
+  pinned: z.boolean().default(false),
+  channelId: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
+  thumbnailHeight: z.number().int().optional(),
+  thumbnailWidth: z.number().int().optional(),
   channel: postChannelSchema,
 });
 
-export type PostVideoDto = InferType<typeof postVideoSchema>;
+export type PostVideoDto = z.infer<typeof postVideoSchema>;
+
 export type GetVideoDto = {
   id: string;
   name: string;

@@ -1,8 +1,8 @@
-import { InferType, object, string } from "yup";
+import { z } from "zod";
 
-export const postChannelSchema = object({
-  name: string().required(),
-  url: string().required().url(),
+export const postChannelSchema = z.object({
+  name: z.string(),
+  url: z.string().url(),
 });
 
-export type PostChannelDto = InferType<typeof postChannelSchema>;
+export type PostChannelDto = z.infer<typeof postChannelSchema>;
