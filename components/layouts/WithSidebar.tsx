@@ -15,6 +15,7 @@ const Main = styled.main`
   flex-direction: column;
   min-height: 90vh;
   overflow-x: hidden;
+  margin-bottom: 100px;
 
   @media screen and (min-width: 768px) {
     margin-left: 208px;

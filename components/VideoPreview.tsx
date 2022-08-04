@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { trpc } from "../lib/utils/trpc";
+import BaseRow from "./common/BaseRow";
+import Menu from "./Menu";
 
 type VideoPreviewProps = {
   thumbnail_url: string;
@@ -146,13 +148,15 @@ export const SmallVideoPreview = ({
       </SmallImageContainer>
       <SmallInfo>
         <SmallTitle>{title}</SmallTitle>
-        <Link href={`/channels/${channelId}`}>
-          <a>
-            <Subtitle>{channel}</Subtitle>
-          </a>
-        </Link>
+        <BaseRow width={"100%"} justify={"space-between"}>
+          <Link href={`/channels/${channelId}`}>
+            <a>
+              <Subtitle>{channel}</Subtitle>
+            </a>
+          </Link>
+          <Menu />
+        </BaseRow>
       </SmallInfo>
-      <button onClick={async () => await handleDelete(id)}>Delete</button>
     </SmallContainer>
   );
 };
