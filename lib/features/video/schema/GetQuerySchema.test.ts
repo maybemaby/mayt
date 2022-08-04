@@ -18,7 +18,7 @@ describe("getQuerySchema", () => {
       last: "String",
       size: "20",
       channelId: "Some id",
-      tag: "happy",
+      tags: "happy",
     };
 
     const casted = await getQuerySchema.parseAsync(obj);

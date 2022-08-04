@@ -17,7 +17,7 @@ const Main = styled.main`
   overflow-x: hidden;
 
   @media screen and (min-width: 768px) {
-    margin-left: 205px;
+    margin-left: 208px;
     margin-top: 0px;
   }
 `;
