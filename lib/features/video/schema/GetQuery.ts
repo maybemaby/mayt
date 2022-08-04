@@ -1,17 +1,18 @@
-import { array, number, object, string } from "yup";
+import { z } from "zod";
 
-export const getQuerySchema = object({
-  last: string().optional(),
-  size: number().optional(),
-  channelId: string().optional(),
-  tag: array()
-    .of(string())
+export const getQuerySchema = z.object({
+  last: z.string().optional(),
+  // If a string is passed to size, it will transform to an integer
+  size: z
+    .number()
+    .int()
+    .or(z.string().transform((val) => parseInt(val)))
+    .optional(),
+  channelId: z.string().optional(),
+  tags: z
+    .string()
+    .array()
     .max(10, "Maximum 10 tags can be used")
-    .optional()
-    .ensure()
-    .default(undefined),
-
-  // .transform((value: string | string[]) => {
-  //   return typeof value === "string" ? [value] : value;
-  // }),
+    .or(z.string().transform((val) => [val]))
+    .optional(),
 });

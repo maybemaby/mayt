@@ -1,71 +1,38 @@
-import { Channel, Video } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import VideoService from "../../lib/features/video/VideoService";
-import ChannelService from "../../lib/features/channels/ChannelService";
+import { useRouter } from "next/router";
+import { trpc } from "../../lib/utils/trpc";
 
-type ChannelPageProps = {
-  videos: Video[];
-  channel: Channel | null;
-};
+const ChannelPage: NextPage = () => {
+  const id = useRouter().query.id as string;
+  const channel = trpc.useQuery(["channels.byId", { id: id }], {
+    enabled: !!id,
+  });
+  const videos = trpc.useQuery(["videos.find", { channelId: id }], {
+    enabled: !!id,
+  });
 
-const ChannelPage: NextPage<ChannelPageProps> = ({ videos, channel }) => {
-  if (channel === null) {
+  if (channel.data === null) {
     return (
       <main>
         <div>No Channel Found</div>
       </main>
     );
-  }
-
-  return (
-    <main>
-      <div>{channel.name}</div>
-      <a href={channel.url} target="_blank" rel="noreferrer">
-        Channel Link
-      </a>
-      {videos.length > 0 ? (
-        videos.map((video) => {
-          return <div key={video.id}>{JSON.stringify(video)}</div>;
-        })
-      ) : (
-        <div>No Videos Found</div>
-      )}
-    </main>
-  );
+  } else
+    return (
+      <main>
+        <div>{channel.data?.name}</div>
+        <a href={channel.data?.url} target="_blank" rel="noreferrer">
+          Channel Link
+        </a>
+        {videos.data && videos.data.length > 0 ? (
+          videos.data.map((video) => {
+            return <div key={video.id}>{JSON.stringify(video)}</div>;
+          })
+        ) : (
+          <div>No Videos Found</div>
+        )}
+      </main>
+    );
 };
 
 export default ChannelPage;
-
-export const getServerSideProps: GetServerSideProps<ChannelPageProps> = async (
-  context
-) => {
-  context.res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=300, stale-while-revalidate=300"
-  );
-
-  const id = context.params!.id;
-
-  if (id && typeof id === "string") {
-    const channel = await ChannelService.findChannel(id);
-    let videos = await VideoService.findVideos({
-      channelId: id,
-    });
-
-    videos = JSON.parse(JSON.stringify(videos));
-
-    return {
-      props: {
-        videos,
-        channel,
-      },
-    };
-  } else {
-    return {
-      props: {
-        videos: [],
-        channel: null,
-      },
-    };
-  }
-};

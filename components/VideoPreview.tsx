@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { trpc } from "../lib/utils/trpc";
 
 type VideoPreviewProps = {
   thumbnail_url: string;
@@ -114,11 +115,24 @@ const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
 };
 
 export const SmallVideoPreview = ({
+  id,
   thumbnail_url,
   title,
   channel,
   channelId,
-}: VideoPreviewProps) => {
+}: VideoPreviewProps & { id: string }) => {
+  const utils = trpc.useContext();
+  const clear = trpc.useMutation("videos.delete", {
+    onSuccess(input) {
+      utils.invalidateQueries(["videos.find"]);
+      utils.invalidateQueries(["videos.getPinned"]);
+      utils.invalidateQueries(["videos.find", { channelId }]);
+    },
+  });
+  const handleDelete = async (id: string) => {
+    await clear.mutateAsync({ id });
+  };
+
   return (
     <SmallContainer>
       <SmallImageContainer>
@@ -138,6 +152,7 @@ export const SmallVideoPreview = ({
           </a>
         </Link>
       </SmallInfo>
+      <button onClick={async () => await handleDelete(id)}>Delete</button>
     </SmallContainer>
   );
 };

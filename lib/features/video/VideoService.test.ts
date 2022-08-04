@@ -49,19 +49,19 @@ beforeEach(async () => {
         name: "seed 1",
         pinned: false,
         addedAt: latest,
-        ytId: "124asasd2",
+        ytId: "124asasd12",
       },
       {
         name: "seed 2",
         pinned: false,
         addedAt: middle,
-        ytId: "124asasd2",
+        ytId: "124asasda2",
       },
       {
         name: "seed 3",
         pinned: false,
         addedAt: earliest,
-        ytId: "124asasd2",
+        ytId: "124asasd2f",
       },
     ],
   });
@@ -246,5 +246,19 @@ describe("VideoService", () => {
     expect(res.length).toBe(1);
     expect(res[0].name).toBe("Pinned Video");
     expect(res[0].pinned).toBe(true);
+  });
+
+  test("Should toggle pinned", async () => {
+    const unpinned = await db.video.create({
+      data: {
+        name: "unpinned Video",
+        pinned: true,
+        ytId: "Asad12312",
+      },
+    });
+
+    const res = await VideoService.togglePinned(unpinned.id);
+
+    expect(res.pinned).toBeFalsy();
   });
 });

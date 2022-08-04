@@ -9,8 +9,8 @@ describe("getQuerySchema", () => {
       tag: ["happy", "sad"],
     };
 
-    const res = await getQuerySchema.isValid(obj, { stripUnknown: true });
-    expect(res).toBe(true);
+    const res = await getQuerySchema.safeParseAsync(obj);
+    expect(res.success).toBe(true);
   });
 
   test("Should transform", async () => {
@@ -18,27 +18,27 @@ describe("getQuerySchema", () => {
       last: "String",
       size: "20",
       channelId: "Some id",
-      tag: "happy",
+      tags: "happy",
     };
 
-    const casted = getQuerySchema.cast(obj);
-    const res = await getQuerySchema.isValid(obj);
+    const casted = await getQuerySchema.parseAsync(obj);
+    const res = await getQuerySchema.safeParseAsync(obj);
 
-    expect(res).toBe(true);
-    expect(casted.tag).toStrictEqual(["happy"]);
+    expect(res.success).toBe(true);
+    expect(casted.tags).toStrictEqual(["happy"]);
     expect(typeof casted.size).toBe("number");
   });
 
   test("Should allow optional", async () => {
     const obj = {};
-    const casted = getQuerySchema.cast(obj);
-    const res = await getQuerySchema.isValid(obj);
+    const casted = getQuerySchema.parse(obj);
+    const res = await getQuerySchema.safeParseAsync(obj);
 
-    expect(res).toBe(true);
-    expect(getQuerySchema.isValidSync(casted)).toBe(true);
+    expect(res.success).toBe(true);
+    expect(getQuerySchema.safeParse(casted).success).toBe(true);
     expect(casted.channelId).toBe(undefined);
     expect(casted.last).toBe(undefined);
     expect(casted.size).toBe(undefined);
-    expect(casted.tag).toBe(undefined);
+    expect(casted.tags).toBe(undefined);
   });
 });
