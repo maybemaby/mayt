@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { ChangeEvent, FormEventHandler, useState } from "react";
 import styled from "styled-components";
-import { usePostVideo } from "../../hooks/usePostVideo";
+import { trpc } from "../../lib/utils/trpc";
 import BaseTextInput from "../../components/common/BaseTextInput";
 import VideoPreview from "../../components/VideoPreview";
 import BaseBlockButton from "../../components/common/BaseBlockButton";
@@ -55,7 +55,7 @@ const AddVideoPage: NextPage = () => {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [resultFound, setResultFound] = useState<YTOembedReturn | null>(null);
-  const post = usePostVideo();
+  const addVideo = trpc.useMutation("videos.create");
 
   const handleAdd = async () => {
     if (!resultFound) return;
@@ -63,20 +63,20 @@ const AddVideoPage: NextPage = () => {
     // Take the video id from the thumbnail url by getting the second part of the path
     // ex: 	"https://i.ytimg.com/vi/kmPgjr0EL64/hqdefault.jpg"
     const id = new URL(resultFound.thumbnail_url).pathname.split("/")[2];
-    await post.mutateAsync({
-      name: resultFound.title,
-      thumbnailUrl: resultFound.thumbnail_url,
-      thumbnailHeight: resultFound.thumbnail_height,
-      thumbnailWidth: resultFound.thumbnail_width,
-      ytId: id,
-      channel: {
-        name: resultFound.author_name,
-        url: resultFound.author_url,
-      },
-      length: undefined,
-      channelId: undefined,
-      pinned: false,
-    });
+    try {
+      await addVideo.mutateAsync({
+        name: resultFound.title,
+        thumbnailUrl: resultFound.thumbnail_url,
+        thumbnailHeight: resultFound.thumbnail_height,
+        thumbnailWidth: resultFound.thumbnail_width,
+        ytId: id,
+        channel: {
+          name: resultFound.author_name,
+          url: resultFound.author_url,
+        },
+        pinned: false,
+      });
+    } catch {}
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -129,9 +129,13 @@ const AddVideoPage: NextPage = () => {
             <BaseBlockButton onClick={handleAdd} padding="8px" margin="10px 0">
               Add to collection
             </BaseBlockButton>
-            {post.isLoading && <div>Loading</div>}
-            {post.isError && <div>Cannot add to collection</div>}
-            {post.isSuccess && <div>Added!</div>}
+            {addVideo.isLoading && <div>Loading</div>}
+            {addVideo.isError && addVideo.error.data?.code === "CONFLICT" ? (
+              <div>Video already in collection, cannot add.</div>
+            ) : (
+              addVideo.isError && <div>Cannot Add to Collection</div>
+            )}
+            {addVideo.isSuccess && <div>Added!</div>}
           </ReplySection>
         </>
       )}

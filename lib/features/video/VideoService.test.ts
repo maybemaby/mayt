@@ -49,19 +49,19 @@ beforeEach(async () => {
         name: "seed 1",
         pinned: false,
         addedAt: latest,
-        ytId: "124asasd2",
+        ytId: "124asasd12",
       },
       {
         name: "seed 2",
         pinned: false,
         addedAt: middle,
-        ytId: "124asasd2",
+        ytId: "124asasda2",
       },
       {
         name: "seed 3",
         pinned: false,
         addedAt: earliest,
-        ytId: "124asasd2",
+        ytId: "124asasd2f",
       },
     ],
   });

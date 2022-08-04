@@ -10,7 +10,7 @@ datasource db {
 model Video {
   id               String          @id @unique @default(uuid())
   name             String
-  ytId             String
+  ytId             String          @unique
   length           Int?
   thumbnail_url    String?
   thumbnail_height Int?
