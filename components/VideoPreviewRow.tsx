@@ -64,6 +64,7 @@ function VideoPreviewRow<T extends VideoLike>({
         {videos.map((video) => (
           <SmallVideoPreview
             key={video.id}
+            id={video.id}
             channel={video.channel?.name ?? "No Channel"}
             channelId={video.channel?.id}
             thumbnail_url={video.thumbnail_url ?? ""}
