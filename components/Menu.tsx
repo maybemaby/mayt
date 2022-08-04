@@ -81,12 +81,14 @@ const Menu = ({ iconSize }: MenuProps) => {
           e.stopPropagation();
           setVisible(!visible);
         }}
+        aria-haspopup="true"
+        aria-controls="menu"
       >
         <BsThreeDotsVertical size={iconSize ?? 20} />
       </MenuButton>
 
       <div ref={popperElement} style={styles.popper} {...attributes.popper}>
-        <MenuContainer visible={visible}>
+        <MenuContainer visible={visible} role="menu">
           Popper Element
           <div ref={setArrowElement} style={styles.arrow}></div>
         </MenuContainer>
