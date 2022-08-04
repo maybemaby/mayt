@@ -8,14 +8,6 @@ import IconHeader from "../components/common/IconHeader";
 import VideoPreviewRow from "../components/VideoPreviewRow";
 import { trpc } from "../lib/utils/trpc";
 
-// export type HomeProps = {
-//   pinnedVideos: AsyncReturnType<typeof VideoService["getPinned"]>;
-//   latestVideos: (Omit<
-//     Unpacked<AsyncReturnType<typeof VideoService["findVideos"]>>,
-//     "addedAt"
-//   > & { addedAt: string })[];
-// };
-
 const PinnedContent = styled.div`
   width: 100%;
   padding: 40px 20px 10px 0px;
@@ -102,34 +94,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-// export const getServerSideProps: GetServerSideProps<HomeProps> = async (
-//   context
-// ) => {
-//   context.res.setHeader(
-//     "Cache-Control",
-//     "public, s-maxage=20, stale-while-revalidate=60"
-//   );
-
-//   const latest = await VideoService.findVideos({
-//     orderBy: {
-//       addedAt: "desc",
-//     },
-//     size: 100,
-//   });
-
-//   // Consider using JSON.parse(JSON.stringify(latest)) instead
-
-//   const videos = latest.map((video) => {
-//     return { ...video, addedAt: video.addedAt.toDateString() };
-//   });
-
-//   const pinned = await VideoService.getPinned(100);
-
-//   return {
-//     props: {
-//       latestVideos: videos,
-//       pinnedVideos: pinned,
-//     },
-//   };
-// };

@@ -1,13 +1,9 @@
 import { GetServerSideProps, NextPage } from "next";
-import VideoService from "../../lib/features/video/VideoService";
-import ChannelService from "../../lib/features/channels/ChannelService";
+import { useRouter } from "next/router";
 import { trpc } from "../../lib/utils/trpc";
 
-type ChannelPageProps = {
-  id: string;
-};
-
-const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
+const ChannelPage: NextPage = () => {
+  const id = useRouter().query.id as string;
   const channel = trpc.useQuery(["channels.byId", { id: id }], {
     enabled: !!id,
   });
@@ -40,23 +36,3 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
 };
 
 export default ChannelPage;
-
-export const getServerSideProps: GetServerSideProps<ChannelPageProps> = async (
-  context
-) => {
-  const id = context.params!.id;
-
-  if (typeof id === "string") {
-    return {
-      props: {
-        id,
-      },
-    };
-  } else {
-    return {
-      props: {
-        id: "none",
-      },
-    };
-  }
-};
