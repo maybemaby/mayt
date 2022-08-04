@@ -247,4 +247,18 @@ describe("VideoService", () => {
     expect(res[0].name).toBe("Pinned Video");
     expect(res[0].pinned).toBe(true);
   });
+
+  test("Should toggle pinned", async () => {
+    const unpinned = await db.video.create({
+      data: {
+        name: "unpinned Video",
+        pinned: true,
+        ytId: "Asad12312",
+      },
+    });
+
+    const res = await VideoService.togglePinned(unpinned.id);
+
+    expect(res.pinned).toBeFalsy();
+  });
 });

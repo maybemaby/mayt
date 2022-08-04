@@ -139,12 +139,34 @@ async function addTag(videoId: string, tagId: string) {
   });
 }
 
+async function togglePinned(id: string) {
+  const found = await db.video.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!found) {
+    throw new Error(`Video ${id} not found`);
+  }
+
+  return await db.video.update({
+    where: {
+      id,
+    },
+    data: {
+      pinned: !found.pinned,
+    },
+  });
+}
+
 const VideoService = {
   createVideo,
   deleteVideo,
   findVideos,
   addTag,
   getPinned,
+  togglePinned,
 };
 
 export default VideoService;
