@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { usePopper } from "react-popper";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -8,6 +8,8 @@ import PopIn from "./animations/PopIn";
 
 type MenuProps = {
   iconSize?: number;
+  options: { label: string; value: string }[];
+  onSelect(value: string): void;
 };
 
 const MenuButton = styled(IconButton)`
@@ -22,21 +24,42 @@ const MenuButton = styled(IconButton)`
   }
 `;
 
-const MenuContainer = styled.div<{ visible: boolean }>`
+const MenuContainer = styled.ul<{ visible: boolean }>`
   display: ${(props) => (props.visible ? "flex" : "none")};
   flex-direction: column;
   background-color: ${(props) => props.theme.color.grey[200]};
   border: 2px solid ${(props) => props.theme.color.grey[500]};
-  padding: 10px;
+  padding: 0px;
   border-radius: 10px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   transition: all 500ms ease;
+  list-style: none;
+  margin: 0px;
+  overflow: hidden;
 
   animation: ${PopIn} 100ms linear;
 `;
 
-const Menu = ({ iconSize }: MenuProps) => {
+const MenuItem = styled.li`
+  display: flex;
+  flex-direction: space-between;
+  width: 100%;
+  padding: 7px 15px;
+
+  &:hover {
+    background-color: ${(props) => props.theme.color.grey[300]};
+    cursor: pointer;
+  }
+
+  &:focus-visible,
+  &:focus-within {
+    background-color: ${(props) => props.theme.color.grey[300]};
+    outline-offset: -4px;
+  }
+`;
+
+const Menu = ({ iconSize, options, onSelect }: MenuProps) => {
   const [visible, setVisible] = useState(false);
   const refElement = useRef<HTMLButtonElement | null>(null);
   // const [refElement, setRefElement] = useState<HTMLButtonElement | null>(null);
@@ -63,6 +86,11 @@ const Menu = ({ iconSize }: MenuProps) => {
     }
   );
 
+  // TODO: Change selected and perform selections with keyboard
+  const handleKeyPresses = (e: KeyboardEvent) => {
+    console.log(e);
+  };
+
   useOnClickOutside(
     popperElement,
     (e) => {
@@ -71,6 +99,11 @@ const Menu = ({ iconSize }: MenuProps) => {
     undefined,
     refElement
   );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPresses);
+    return document.removeEventListener("keydown", handleKeyPresses);
+  }, []);
 
   return (
     <>
@@ -89,7 +122,21 @@ const Menu = ({ iconSize }: MenuProps) => {
 
       <div ref={popperElement} style={styles.popper} {...attributes.popper}>
         <MenuContainer visible={visible} role="menu">
-          Popper Element
+          {options.map((opt) => {
+            return (
+              <MenuItem
+                key={opt.label}
+                onClick={() => {
+                  onSelect(opt.value);
+                  setVisible(false);
+                }}
+                role="button"
+                tabIndex={0}
+              >
+                {opt.label}
+              </MenuItem>
+            );
+          })}
           <div ref={setArrowElement} style={styles.arrow}></div>
         </MenuContainer>
       </div>
