@@ -122,7 +122,8 @@ export const SmallVideoPreview = ({
   title,
   channel,
   channelId,
-}: VideoPreviewProps & { id: string }) => {
+  pinned,
+}: VideoPreviewProps & { id: string; pinned: boolean }) => {
   const utils = trpc.useContext();
   const clear = trpc.useMutation("videos.delete", {
     onSuccess(input) {
@@ -131,9 +132,40 @@ export const SmallVideoPreview = ({
       utils.invalidateQueries(["videos.find", { channelId }]);
     },
   });
-  const handleDelete = async (id: string) => {
-    await clear.mutateAsync({ id });
+  const togglePin = trpc.useMutation("videos.togglePinned", {
+    onSuccess(input) {
+      utils.invalidateQueries(["videos.find"]);
+      utils.invalidateQueries(["videos.getPinned"]);
+    },
+  });
+
+  const handleSelect = (value: string) => {
+    const split = value.split(".");
+    if (split.length < 2) {
+      return;
+    }
+    switch (split[0]) {
+      case "pin":
+        togglePin.mutate({ id: split[1] });
+        break;
+      case "delete":
+        clear.mutate({ id: split[1] });
+        break;
+      default:
+        console.log(split[0]);
+        break;
+    }
   };
+
+  const options = pinned
+    ? [
+        { label: "Unpin", value: `pin.${id}` },
+        { label: "Delete", value: `delete.${id}` },
+      ]
+    : [
+        { label: "Pin", value: `pin.${id}` },
+        { label: "Delete", value: `delete.${id}` },
+      ];
 
   return (
     <SmallContainer>
@@ -154,7 +186,7 @@ export const SmallVideoPreview = ({
               <Subtitle>{channel}</Subtitle>
             </a>
           </Link>
-          <Menu />
+          <Menu options={options} onSelect={handleSelect} />
         </BaseRow>
       </SmallInfo>
     </SmallContainer>

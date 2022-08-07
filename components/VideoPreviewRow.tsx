@@ -42,6 +42,7 @@ interface VideoLike {
     name: string;
   } | null;
   thumbnail_url: string | null;
+  pinned: boolean | null;
 }
 
 type VideoPreviewRowProps<TVideo extends VideoLike> = {
@@ -69,6 +70,7 @@ function VideoPreviewRow<T extends VideoLike>({
             channelId={video.channel?.id}
             thumbnail_url={video.thumbnail_url ?? ""}
             title={video.name}
+            pinned={video.pinned ?? false}
           />
         ))}
       </Row>
