@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import type { VideoLike } from "../lib/types";
 import type { CommonStyle } from "../lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
 
@@ -33,17 +34,6 @@ const Row = styled.div<{ flexWrap?: boolean }>`
     align-items: flex-start;
   }
 `;
-
-interface VideoLike {
-  id: string;
-  name: string;
-  channel: {
-    id: string;
-    name: string;
-  } | null;
-  thumbnail_url: string | null;
-  pinned: boolean | null;
-}
 
 type VideoPreviewRowProps<TVideo extends VideoLike> = {
   id: string;
