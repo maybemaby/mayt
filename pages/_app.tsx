@@ -56,8 +56,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
-    const url = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/trpc`
+    const url = process.env.PUBLIC_DOMAIN
+      ? `${process.env.PUBLIC_DOMAIN}/api/trpc`
+      : process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/trpc`
       : "http://localhost:3000/api/trpc";
 
     return { url };
