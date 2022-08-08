@@ -23,9 +23,7 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value:
-              `${process.env.NEXT_PUBLIC_VERCEL_URL},mayt.vercel.app` ??
-              "localhost:3000,mayt.vercel.app",
+            value: `${process.env.PUBLIC_DOMAIN}` ?? "localhost:3000",
           },
           { key: "Access-Control-Allow-Credentials", value: "true" },
         ],
