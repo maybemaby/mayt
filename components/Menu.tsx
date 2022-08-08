@@ -37,6 +37,7 @@ const MenuContainer = styled.ul<{ visible: boolean }>`
   list-style: none;
   margin: 0px;
   overflow: hidden;
+  z-index: 3;
 
   animation: ${PopIn} 100ms linear;
 `;
@@ -120,7 +121,11 @@ const Menu = ({ iconSize, options, onSelect }: MenuProps) => {
         <BsThreeDotsVertical size={iconSize ?? 20} />
       </MenuButton>
 
-      <div ref={popperElement} style={styles.popper} {...attributes.popper}>
+      <div
+        ref={popperElement}
+        style={{ ...styles.popper, zIndex: 3 }}
+        {...attributes.popper}
+      >
         <MenuContainer visible={visible} role="menu">
           {options.map((opt) => {
             return (

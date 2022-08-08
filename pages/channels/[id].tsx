@@ -1,6 +1,26 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
+import styled from "styled-components";
 import { useRouter } from "next/router";
 import { trpc } from "../../lib/utils/trpc";
+import VideoPreviewGrid from "../../components/VideoPreviewGrid";
+
+const Header = styled.section`
+  margin: 30px auto;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: inherit;
+
+  strong {
+    font-size: ${(props) => props.theme.fontSize[4]};
+  }
+
+  a {
+    text-decoration: underline;
+    color: ${(props) => props.theme.color.primary[500]};
+  }
+`;
 
 const ChannelPage: NextPage = () => {
   const id = useRouter().query.id as string;
@@ -19,19 +39,19 @@ const ChannelPage: NextPage = () => {
     );
   } else
     return (
-      <main>
-        <div>{channel.data?.name}</div>
-        <a href={channel.data?.url} target="_blank" rel="noreferrer">
-          Channel Link
-        </a>
+      <>
+        <Header id="channel-info">
+          <strong>{channel.data?.name}</strong>
+          <a href={channel.data?.url} target="_blank" rel="noreferrer">
+            Youtube Channel Link
+          </a>
+        </Header>
         {videos.data && videos.data.length > 0 ? (
-          videos.data.map((video) => {
-            return <div key={video.id}>{JSON.stringify(video)}</div>;
-          })
+          <VideoPreviewGrid videos={videos.data} />
         ) : (
           <div>No Videos Found</div>
         )}
-      </main>
+      </>
     );
 };
 
