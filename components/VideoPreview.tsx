@@ -1,3 +1,4 @@
+import React, { ForwardedRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
@@ -116,81 +117,92 @@ const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
   );
 };
 
-export const SmallVideoPreview = ({
-  id,
-  thumbnail_url,
-  title,
-  channel,
-  channelId,
-  pinned,
-}: VideoPreviewProps & { id: string; pinned: boolean }) => {
-  const utils = trpc.useContext();
-  const clear = trpc.useMutation("videos.delete", {
-    onSuccess(input) {
-      utils.invalidateQueries(["videos.find"]);
-      utils.invalidateQueries(["videos.getPinned"]);
-      utils.invalidateQueries(["videos.find", { channelId }]);
-    },
-  });
-  const togglePin = trpc.useMutation("videos.togglePinned", {
-    onSuccess(input) {
-      utils.invalidateQueries(["videos.find"]);
-      utils.invalidateQueries(["videos.getPinned"]);
-    },
-  });
+// eslint-disable-next-line react/display-name
+export const SmallVideoPreview = React.forwardRef(
+  (
+    {
+      id,
+      thumbnail_url,
+      title,
+      channel,
+      channelId,
+      pinned,
+    }: VideoPreviewProps & { id: string; pinned: boolean },
+    ref: ForwardedRef<HTMLDivElement>
+  ) => {
+    const utils = trpc.useContext();
+    const clear = trpc.useMutation("videos.delete", {
+      onSuccess(input) {
+        utils.invalidateQueries(["videos.find"]);
+        utils.invalidateQueries(["videos.getPinned"]);
+        utils.invalidateQueries(["videos.find", { channelId }]);
+      },
+    });
+    const togglePin = trpc.useMutation("videos.togglePinned", {
+      onSuccess(input) {
+        utils.invalidateQueries(["videos.find"]);
+        utils.invalidateQueries(["videos.getPinned"]);
+      },
+    });
 
-  const handleSelect = (value: string) => {
-    const split = value.split(".");
-    if (split.length < 2) {
-      return;
-    }
-    switch (split[0]) {
-      case "pin":
-        togglePin.mutate({ id: split[1] });
-        break;
-      case "delete":
-        clear.mutate({ id: split[1] });
-        break;
-      default:
-        console.log(split[0]);
-        break;
-    }
-  };
+    const handleSelect = (value: string) => {
+      const split = value.split(".");
+      if (split.length < 2) {
+        return;
+      }
+      switch (split[0]) {
+        case "pin":
+          togglePin.mutate({ id: split[1] });
+          break;
+        case "delete":
+          clear.mutate({ id: split[1] });
+          break;
+        case "playlist":
+          window.alert("Added " + split[1]);
+          break;
+        default:
+          console.log(split[0]);
+          break;
+      }
+    };
 
-  const options = pinned
-    ? [
-        { label: "Unpin", value: `pin.${id}` },
-        { label: "Delete", value: `delete.${id}` },
-      ]
-    : [
-        { label: "Pin", value: `pin.${id}` },
-        { label: "Delete", value: `delete.${id}` },
-      ];
+    const options = pinned
+      ? [
+          { label: "Unpin", value: `pin.${id}` },
+          { label: "Add to playlist", value: `playlist.${id}` },
+          { label: "Delete", value: `delete.${id}` },
+        ]
+      : [
+          { label: "Pin", value: `pin.${id}` },
+          { label: "Add to playlist", value: `playlist.${id}` },
+          { label: "Delete", value: `delete.${id}` },
+        ];
 
-  return (
-    <SmallContainer>
-      <SmallImageContainer>
-        <StyledImage
-          src={thumbnail_url}
-          alt={title}
-          priority
-          layout="fill"
-          objectFit="contain"
-        />
-      </SmallImageContainer>
-      <SmallInfo>
-        <SmallTitle>{title}</SmallTitle>
-        <BaseRow width={"100%"} justify={"space-between"}>
-          <Link href={`/channels/${channelId}`}>
-            <a>
-              <Subtitle>{channel}</Subtitle>
-            </a>
-          </Link>
-          <Menu options={options} onSelect={handleSelect} />
-        </BaseRow>
-      </SmallInfo>
-    </SmallContainer>
-  );
-};
+    return (
+      <SmallContainer ref={ref}>
+        <SmallImageContainer>
+          <StyledImage
+            src={thumbnail_url}
+            alt={title}
+            priority
+            layout="fill"
+            objectFit="contain"
+          />
+        </SmallImageContainer>
+        <SmallInfo>
+          <SmallTitle>{title}</SmallTitle>
+          <BaseRow width={"100%"} justify={"space-between"}>
+            <Link href={`/channels/${channelId}`}>
+              <a>
+                <Subtitle>{channel}</Subtitle>
+              </a>
+            </Link>
+            <Menu options={options} onSelect={handleSelect} />
+          </BaseRow>
+        </SmallInfo>
+      </SmallContainer>
+    );
+  }
+);
 
 export default VideoPreview;
