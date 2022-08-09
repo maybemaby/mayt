@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { trpc } from "../../lib/utils/trpc";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
+import { useMemo } from "react";
 
 const Header = styled.section`
   padding: 30px 50px 20px 50px;
@@ -41,9 +42,19 @@ const ChannelPage: NextPage = () => {
   const channel = trpc.useQuery(["channels.byId", { id: id }], {
     enabled: !!id,
   });
-  const videos = trpc.useQuery(["videos.find", { channelId: id }], {
+  const videos = trpc.useInfiniteQuery(["videos.find", { channelId: id }], {
     enabled: !!id,
+    getNextPageParam(last) {
+      return last.cursor;
+    },
   });
+
+  const videoData = useMemo(() => {
+    if (!videos.data) {
+      return [];
+    }
+    return videos.data?.pages.map((page) => page.videos).flat();
+  }, [videos.data]);
 
   if (channel.data === null) {
     return (
@@ -62,8 +73,16 @@ const ChannelPage: NextPage = () => {
             Youtube Channel Link
           </a>
         </Header>
-        {videos.isSuccess && videos.data.videos ? (
-          <VideoPreviewGrid videos={videos.data.videos} />
+        {videos.isSuccess && videos.data && videos.isFetchedAfterMount ? (
+          <VideoPreviewGrid
+            videos={videoData}
+            onLoad={() => {
+              if (videos.hasNextPage) videos.fetchNextPage();
+            }}
+            loading={videos.isFetchingNextPage}
+          />
+        ) : videos.isFetching ? (
+          <div style={{ margin: "auto" }}>Loading...</div>
         ) : (
           <div style={{ margin: "auto" }}>No Videos Found</div>
         )}
