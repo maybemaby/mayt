@@ -5,12 +5,21 @@ import { trpc } from "../../lib/utils/trpc";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
 
 const Header = styled.section`
-  margin: 30px auto;
+  padding: 30px 50px 20px 50px;
+  margin: 0 auto 30px auto;
   width: 90%;
   display: flex;
   flex-direction: column;
   gap: 10px;
   font-family: inherit;
+  background-color: ${(props) => props.theme.color.secondary[50]};
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0 2px 4px, rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+  @media screen and (min-width: 768px) {
+    border-radius: 0 0 10px 10px;
+  }
 
   strong {
     font-size: ${(props) => props.theme.fontSize[4]};
@@ -19,6 +28,11 @@ const Header = styled.section`
   a {
     text-decoration: underline;
     color: ${(props) => props.theme.color.primary[500]};
+    transition: color 200ms ease;
+
+    &:hover {
+      color: ${(props) => props.theme.color.primary[600]};
+    }
   }
 `;
 
@@ -41,15 +55,17 @@ const ChannelPage: NextPage = () => {
     return (
       <>
         <Header id="channel-info">
-          <strong>{channel.data?.name}</strong>
+          <strong>
+            {channel.isLoading ? "Loading..." : channel.data?.name}
+          </strong>
           <a href={channel.data?.url} target="_blank" rel="noreferrer">
             Youtube Channel Link
           </a>
         </Header>
-        {videos.data && videos.data.length > 0 ? (
-          <VideoPreviewGrid videos={videos.data} />
+        {videos.isSuccess && videos.data.videos ? (
+          <VideoPreviewGrid videos={videos.data.videos} />
         ) : (
-          <div>No Videos Found</div>
+          <div style={{ margin: "auto" }}>No Videos Found</div>
         )}
       </>
     );
