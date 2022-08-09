@@ -10,7 +10,7 @@ import { trpc } from "../lib/utils/trpc";
 
 const PinnedContent = styled.div`
   width: 100%;
-  padding: 40px 20px 10px 0px;
+  padding: 40px 20px 10px 0;
   background-color: #fcc97693;
   transform: translateY(-12.5%);
   z-index: 1;
@@ -19,11 +19,11 @@ const PinnedContent = styled.div`
 
 const SecondaryContent = styled.div`
   width: 100%;
-  padding: 40px 20px 10px 0px;
+  padding: 40px 20px 10px 0;
 `;
 
 const StyledIconHeader = styled(IconHeader)`
-  margin: 0px auto;
+  margin: 0 auto;
   width: 80%;
 
   @media screen and (min-width: 768px) {
@@ -71,6 +71,7 @@ const Home: NextPage = () => {
           Pinned
         </StyledIconHeader>
         <VideoPreviewRow
+          loading={pinned.isLoading}
           videos={pinned.data ?? []}
           id={"Pinned"}
           flexWrap={false}
@@ -80,12 +81,13 @@ const Home: NextPage = () => {
         <StyledIconHeader Icon={TbTrendingUp} iconProps={{ size: 25 }}>
           Recently Added
         </StyledIconHeader>
-        {latest.isLoading && <div>Loading</div>}
-        {latest.data && (
+        {latest.isLoading && <div style={{ margin: "30px" }}>Loading</div>}
+        {latest.data?.videos && (
           <VideoPreviewRow
-            videos={latest.data}
+            videos={latest.data.videos}
             id={"latest"}
             flexWrap={false}
+            loading={latest.isLoading}
           />
         )}
       </SecondaryContent>

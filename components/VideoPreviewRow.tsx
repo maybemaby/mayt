@@ -29,7 +29,7 @@ const Row = styled.div<{ flexWrap?: boolean }>`
   flex-wrap: ${(props) => (props.flexWrap ? "wrap" : "nowrap")};
 
   @media screen and (min-width: 768px) {
-    margin: 0px;
+    margin: 0;
     flex-direction: row;
     align-items: flex-start;
   }
@@ -38,6 +38,7 @@ const Row = styled.div<{ flexWrap?: boolean }>`
 type VideoPreviewRowProps<TVideo extends VideoLike> = {
   id: string;
   videos: TVideo[];
+  loading?: boolean;
   commonStyle?: CommonStyle;
   flexWrap?: boolean;
 };
@@ -47,10 +48,12 @@ function VideoPreviewRow<T extends VideoLike>({
   videos,
   commonStyle,
   flexWrap,
+  loading,
 }: VideoPreviewRowProps<T>) {
   return (
     <Section id={id} {...commonStyle}>
-      {videos.length === 0 && <div>No Videos Found</div>}
+      {loading === true && <div style={{ margin: "auto" }}>Loading...</div>}
+      {videos.length === 0 && !loading && <div>No Videos Found</div>}
       <Row flexWrap={flexWrap}>
         {videos.map((video) => (
           <SmallVideoPreview
