@@ -52,7 +52,13 @@ export const videoRouter = trpc
         size: input.size,
         matchingTags: input.tags,
       });
-      return videos;
+      if (input.size && videos.length < input.size) {
+        return { videos, cursor: null };
+      } else if (!input.size && videos.length < 20) {
+        return { videos, cursor: null };
+      }
+      const cursor = videos[videos.length - 1].id;
+      return { videos, cursor };
     },
   })
   .mutation("addTag", {
