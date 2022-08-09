@@ -48,7 +48,7 @@ export const videoRouter = trpc
     async resolve({ input }) {
       const videos = await VideoService.findVideos({
         channelId: input.channelId,
-        cursor: input.last,
+        cursor: input.cursor ?? undefined,
         size: input.size,
         matchingTags: input.tags,
       });
