@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { VideoLike } from "../lib/types";
 import { SmallVideoPreview } from "./VideoPreview";
 import { CommonStyle } from "../lib/types/CommonStyle";
+import BarLoader from "./common/BarLoader";
 
 type VideoPreviewGridProps<T extends VideoLike> = {
   commonStyle?: CommonStyle;
@@ -88,7 +89,11 @@ function VideoPreviewGrid<T extends VideoLike>({
           );
         })}
       </GridContainer>
-      {loading && <div style={{ margin: "auto" }}>Loading...</div>}
+      {loading && (
+        <div style={{ margin: " 20px auto" }}>
+          <BarLoader />
+        </div>
+      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import styled from "styled-components";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
+import BarLoader from "../../components/common/BarLoader";
 import { trpc } from "../../lib/utils/trpc";
 
 const Header = styled.h2`
@@ -27,7 +28,9 @@ const VideosPage: NextPage = () => {
           loading={videos.isFetchingNextPage}
         />
       ) : videos.isFetching ? (
-        <div>Loading</div>
+        <div style={{ margin: "auto" }}>
+          <BarLoader />
+        </div>
       ) : (
         <div>No Videos Found</div>
       )}

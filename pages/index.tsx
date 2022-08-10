@@ -7,6 +7,7 @@ import { SearchBox } from "../components/SearchBox";
 import IconHeader from "../components/common/IconHeader";
 import VideoPreviewRow from "../components/VideoPreviewRow";
 import { trpc } from "../lib/utils/trpc";
+import BarLoader from "../components/common/BarLoader";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -81,7 +82,11 @@ const Home: NextPage = () => {
         <StyledIconHeader Icon={TbTrendingUp} iconProps={{ size: 25 }}>
           Recently Added
         </StyledIconHeader>
-        {latest.isLoading && <div style={{ margin: "30px" }}>Loading</div>}
+        {latest.isLoading && (
+          <div style={{ margin: "60px 30px" }}>
+            <BarLoader />
+          </div>
+        )}
         {latest.data?.videos && (
           <VideoPreviewRow
             videos={latest.data.videos}

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { trpc } from "../../lib/utils/trpc";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
 import { useMemo } from "react";
+import BarLoader from "../../components/common/BarLoader";
 
 const Header = styled.section`
   padding: 30px 50px 20px 50px;
@@ -82,7 +83,9 @@ const ChannelPage: NextPage = () => {
             loading={videos.isFetchingNextPage}
           />
         ) : videos.isFetching ? (
-          <div style={{ margin: "auto" }}>Loading...</div>
+          <div style={{ margin: "auto" }}>
+            <BarLoader />
+          </div>
         ) : (
           <div style={{ margin: "auto" }}>No Videos Found</div>
         )}

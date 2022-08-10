@@ -2,6 +2,7 @@ import styled from "styled-components";
 import type { VideoLike } from "../lib/types";
 import type { CommonStyle } from "../lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
+import BarLoader from "./common/BarLoader";
 
 const Section = styled.section<CommonStyle>`
   margin: 20px auto;
@@ -52,7 +53,11 @@ function VideoPreviewRow<T extends VideoLike>({
 }: VideoPreviewRowProps<T>) {
   return (
     <Section id={id} {...commonStyle}>
-      {loading === true && <div style={{ margin: "auto" }}>Loading...</div>}
+      {loading === true && (
+        <div style={{ margin: "auto" }}>
+          <BarLoader />
+        </div>
+      )}
       {videos.length === 0 && !loading && <div>No Videos Found</div>}
       <Row flexWrap={flexWrap}>
         {videos.map((video) => (
