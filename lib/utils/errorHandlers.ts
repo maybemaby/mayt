@@ -15,7 +15,20 @@ export function prismaKnownErrorToTrpc(
         code: "CONFLICT",
         message: "Entity already exists, cannot create duplicate.",
       });
+    case "P2001":
+      return new trpc.TRPCError({
+        code: "NOT_FOUND",
+        message: "Entity could not be found.",
+      });
     default:
       return defaultServerError;
+  }
+}
+
+export function handleRouterError(error: unknown) {
+  if (error instanceof PrismaClientKnownRequestError) {
+    return prismaKnownErrorToTrpc(error);
+  } else {
+    return defaultServerError;
   }
 }
