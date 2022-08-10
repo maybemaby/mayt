@@ -160,6 +160,9 @@ export const SmallVideoPreview = React.forwardRef(
         case "playlist":
           window.alert("Added " + split[1]);
           break;
+        case "tag":
+          window.alert("Change tag");
+          break;
         default:
           console.log(split[0]);
           break;
@@ -170,11 +173,14 @@ export const SmallVideoPreview = React.forwardRef(
       ? [
           { label: "Unpin", value: `pin.${id}` },
           { label: "Add to playlist", value: `playlist.${id}` },
+          { label: "Update tags", value: `tag.${id}` },
           { label: "Delete", value: `delete.${id}` },
         ]
       : [
           { label: "Pin", value: `pin.${id}` },
           { label: "Add to playlist", value: `playlist.${id}` },
+          { label: "Update tags", value: `tag.${id}` },
+
           { label: "Delete", value: `delete.${id}` },
         ];
 
