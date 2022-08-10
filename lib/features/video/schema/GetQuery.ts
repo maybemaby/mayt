@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const getQuerySchema = z.object({
-  last: z.string().optional(),
+  cursor: z.string().nullish(),
   // If a string is passed to size, it will transform to an integer
   size: z
     .number()

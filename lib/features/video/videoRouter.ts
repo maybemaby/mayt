@@ -48,11 +48,17 @@ export const videoRouter = trpc
     async resolve({ input }) {
       const videos = await VideoService.findVideos({
         channelId: input.channelId,
-        cursor: input.last,
+        cursor: input.cursor ?? undefined,
         size: input.size,
         matchingTags: input.tags,
       });
-      return videos;
+      if (input.size && videos.length < input.size) {
+        return { videos, cursor: null };
+      } else if (!input.size && videos.length < 20) {
+        return { videos, cursor: null };
+      }
+      const cursor = videos[videos.length - 1].id;
+      return { videos, cursor };
     },
   })
   .mutation("addTag", {

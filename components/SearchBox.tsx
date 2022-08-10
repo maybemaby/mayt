@@ -21,7 +21,7 @@ const OuterContainer = styled.div<CommonStyle>`
   margin: ${(props) => props.margin};
   color: ${(props) => props.color};
   background-color: ${(props) => props.backgroundColor};
-  max-height: 60px;
+  max-height: 46px;
   z-index: 2;
 `;
 
@@ -29,8 +29,7 @@ const Input = styled(BaseTextInput)`
   width: 80%;
 
   &::after {
-    box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25),
-      -2px 5px 6px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25), -2px 5px 6px rgba(0, 0, 0, 0.25);
     opacity: 0;
     transition: opacity 300ms ease-in-out;
   }
@@ -51,7 +50,7 @@ const ResultBox = styled.div`
   margin: 20px auto;
   padding: 20px 10px;
   border-radius: 10px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
   animation: ${expandVert} 300ms ease;
   z-index: 2;
   background-color: white;
@@ -60,6 +59,7 @@ const ResultBox = styled.div`
     padding: 0;
     margin: 0;
   }
+
   li {
     list-style: none;
     padding: 5px;

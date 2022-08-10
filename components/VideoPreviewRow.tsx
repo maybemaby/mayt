@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import type { VideoLike } from "../lib/types";
 import type { CommonStyle } from "../lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
+import BarLoader from "./common/BarLoader";
 
 const Section = styled.section<CommonStyle>`
   margin: 20px auto;
@@ -28,26 +30,16 @@ const Row = styled.div<{ flexWrap?: boolean }>`
   flex-wrap: ${(props) => (props.flexWrap ? "wrap" : "nowrap")};
 
   @media screen and (min-width: 768px) {
-    margin: 0px;
+    margin: 0;
     flex-direction: row;
     align-items: flex-start;
   }
 `;
 
-interface VideoLike {
-  id: string;
-  name: string;
-  channel: {
-    id: string;
-    name: string;
-  } | null;
-  thumbnail_url: string | null;
-  pinned: boolean | null;
-}
-
 type VideoPreviewRowProps<TVideo extends VideoLike> = {
   id: string;
   videos: TVideo[];
+  loading?: boolean;
   commonStyle?: CommonStyle;
   flexWrap?: boolean;
 };
@@ -57,10 +49,16 @@ function VideoPreviewRow<T extends VideoLike>({
   videos,
   commonStyle,
   flexWrap,
+  loading,
 }: VideoPreviewRowProps<T>) {
   return (
     <Section id={id} {...commonStyle}>
-      {videos.length === 0 && <div>No Videos Found</div>}
+      {loading === true && (
+        <div style={{ margin: "auto" }}>
+          <BarLoader />
+        </div>
+      )}
+      {videos.length === 0 && !loading && <div>No Videos Found</div>}
       <Row flexWrap={flexWrap}>
         {videos.map((video) => (
           <SmallVideoPreview
