@@ -31,6 +31,7 @@ const Header = styled.section`
     text-decoration: underline;
     color: ${(props) => props.theme.color.primary[500]};
     transition: color 200ms ease;
+    width: fit-content;
 
     &:hover {
       color: ${(props) => props.theme.color.primary[600]};
