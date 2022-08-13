@@ -5,7 +5,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useModal } from "../../hooks/useModal";
 import BarLoader from "../../components/common/BarLoader";
 import { IconButton } from "../../components/common/IconButton";
-import Modal from "../../components/Modal";
+import PlaylistPreview from "../../components/PlaylistPreview";
 import { trpc } from "../../lib/utils/trpc";
 
 const Page = styled.section`
@@ -74,7 +74,7 @@ const SubmitButton = styled.button`
 `;
 
 const PlaylistPage: NextPage = () => {
-  const { open } = useModal();
+  const { show } = useModal();
   const [name, setName] = useState("");
   const [submissionError, setSubmissionError] = useState("");
   const utils = trpc.useContext();
@@ -86,6 +86,27 @@ const PlaylistPage: NextPage = () => {
       },
     }
   );
+
+  const handleOpen = () => {
+    show(
+      <SubmitForm onSubmit={handleSubmit}>
+        <label htmlFor="name">Playlist Name</label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.currentTarget.value)}
+        />
+        <SubmitButton type="submit">Submit</SubmitButton>
+        {addPlaylist.isLoading && <div style={{ margin: "auto" }}>Loading</div>}
+        {addPlaylist.isSuccess && <div style={{ margin: "auto" }}>Added!</div>}
+        {submissionError && (
+          <div style={{ margin: "auto", color: "red" }}>{submissionError}</div>
+        )}
+      </SubmitForm>
+    );
+  };
 
   const addPlaylist = trpc.useMutation(["playlists.create"], {
     onSuccess() {
@@ -116,31 +137,7 @@ const PlaylistPage: NextPage = () => {
   return (
     <Page id="playlist-page">
       <Header>Playlists</Header>
-      <Modal>
-        <SubmitForm onSubmit={handleSubmit}>
-          <label htmlFor="name">Playlist Name</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.currentTarget.value)}
-          />
-          <SubmitButton type="submit">Submit</SubmitButton>
-          {addPlaylist.isLoading && (
-            <div style={{ margin: "auto" }}>Loading</div>
-          )}
-          {addPlaylist.isSuccess && (
-            <div style={{ margin: "auto" }}>Added!</div>
-          )}
-          {submissionError && (
-            <div style={{ margin: "auto", color: "red" }}>
-              {submissionError}
-            </div>
-          )}
-        </SubmitForm>
-      </Modal>
-      <StyledIconButton onClick={() => open()}>
+      <StyledIconButton onClick={handleOpen}>
         <AiOutlinePlus size={25} />
         New Playlist
       </StyledIconButton>
@@ -152,7 +149,7 @@ const PlaylistPage: NextPage = () => {
             <div style={{ margin: "auto" }}>No Playlists Found</div>
           )}
           {playlistData.map((pl) => {
-            return <div key={pl.id}>{pl.name}</div>;
+            return <PlaylistPreview playlist={pl} key={pl.id} />;
           })}
         </>
       ) : playlists.isFetching ? (

@@ -43,8 +43,8 @@ const Container = styled.div`
   }
 `;
 
-const Modal = ({ children }: { children: React.ReactNode }) => {
-  const { openState, close } = useModal();
+const Modal = ({ children }: { children?: React.ReactNode }) => {
+  const { openState, content, close } = useModal();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
   useOnClickOutside(containerRef, () => {
@@ -53,7 +53,11 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     topRef.current = document.querySelector("#__next");
-  }, []);
+
+    return () => {
+      topRef.current = null;
+    };
+  }, [topRef]);
 
   return (
     <>
@@ -65,7 +69,7 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
               <IconButton className="exit" onClick={() => close()}>
                 <AiOutlineClose size={25} />
               </IconButton>
-              {children}
+              {content}
             </Container>
           </Underlay>,
           topRef.current

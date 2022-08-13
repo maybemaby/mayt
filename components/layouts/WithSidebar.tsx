@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { AppSidebar } from "../AppSidebar";
 import { AppHeader } from "../AppHeader";
+import Modal from "../Modal";
 
 type WithSidebarProps = {
   children: React.ReactNode;
@@ -34,6 +35,7 @@ export const WithSidebar = ({ children }: WithSidebarProps) => {
       <AppHeader onMenuClick={() => setShowSidebar(true)} />
 
       <AppSidebar forceShow={showSideBar} onClose={sidebarCloser} />
+      <Modal></Modal>
       <Main>{children}</Main>
     </>
   );
