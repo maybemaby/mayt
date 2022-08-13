@@ -59,7 +59,18 @@ async function find(options: FindPlaylistOptions) {
     ...params,
     include: {
       _count: true,
-      videoPlaylist: true,
+      videoPlaylist: {
+        include: {
+          video: {
+            select: {
+              id: true,
+              name: true,
+              thumbnail_url: true,
+            },
+          },
+        },
+        take: 1,
+      },
     },
   });
 }

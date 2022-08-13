@@ -80,7 +80,7 @@ describe("PlaylistService", () => {
 
     const videos = await PlaylistService.getAllVideos(testPlaylist.id);
     expect(videos.length).toBe(allVideos.length);
-    expect(videos[0].videoId).toBe(testVideo.id);
+    expect(videos[videos.length - 1].videoId).toBe(testVideo.id);
   });
 
   test("Delete one successfully", async () => {
