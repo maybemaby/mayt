@@ -80,7 +80,7 @@ const Menu = ({ iconSize, options, onSelect }: MenuProps) => {
           name: "offset",
           enabled: true,
           options: {
-            offset: [0, 10],
+            offset: [0, 5],
           },
         },
       ],
