@@ -82,24 +82,6 @@ async function findVideos(options: FindVideoOptions) {
     };
   }
 
-  if (options.cursor) {
-    return await db.video.findMany({
-      ...params,
-      include: {
-        channel: true,
-        VideoTag: {
-          include: {
-            tag: {
-              select: {
-                name: true,
-                type: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
   return await db.video.findMany({
     ...params,
     include: {
@@ -114,6 +96,7 @@ async function findVideos(options: FindVideoOptions) {
           },
         },
       },
+      videoPlaylist: true,
     },
   });
 }
@@ -125,6 +108,7 @@ async function getPinned(size: number) {
     },
     include: {
       channel: true,
+      videoPlaylist: true,
     },
     take: size,
   });

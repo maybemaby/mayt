@@ -44,6 +44,7 @@ function VideoPreviewGrid<T extends VideoLike>({
                 title={video.name}
                 thumbnail_url={video.thumbnail_url ?? ""}
                 channelId={video.channel?.id}
+                playlists={video.videoPlaylist}
               />
             );
           }
@@ -56,6 +57,7 @@ function VideoPreviewGrid<T extends VideoLike>({
               title={video.name}
               thumbnail_url={video.thumbnail_url ?? ""}
               channelId={video.channel?.id}
+              playlists={video.videoPlaylist}
             />
           );
         })}

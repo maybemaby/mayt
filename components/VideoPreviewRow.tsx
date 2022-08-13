@@ -69,6 +69,7 @@ function VideoPreviewRow<T extends VideoLike>({
             thumbnail_url={video.thumbnail_url ?? ""}
             title={video.name}
             pinned={video.pinned ?? false}
+            playlists={video.videoPlaylist}
           />
         ))}
       </Row>
