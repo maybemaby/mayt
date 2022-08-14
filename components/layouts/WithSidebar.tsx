@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AppSidebar } from "../AppSidebar";
 import { AppHeader } from "../AppHeader";
-import Modal from "../Modal";
+import { useModal } from "../../hooks/useModal";
+import { useRouter } from "next/router";
 
 type WithSidebarProps = {
   children: React.ReactNode;
@@ -20,22 +21,27 @@ const Main = styled.main`
 
   @media screen and (min-width: 768px) {
     margin-left: 208px;
-    margin-top: 0px;
+    margin-top: 0;
   }
 `;
 
 export const WithSidebar = ({ children }: WithSidebarProps) => {
+  const { close } = useModal();
+  const { route } = useRouter();
   const [showSideBar, setShowSidebar] = useState(false);
   const sidebarCloser = () => {
     setShowSidebar(false);
   };
+
+  useEffect(() => {
+    close();
+  }, [route, close]);
 
   return (
     <>
       <AppHeader onMenuClick={() => setShowSidebar(true)} />
 
       <AppSidebar forceShow={showSideBar} onClose={sidebarCloser} />
-      <Modal></Modal>
       <Main>{children}</Main>
     </>
   );
