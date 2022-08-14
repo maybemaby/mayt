@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ModalContext } from "../components/ModalProvider";
 
 export const useModal = () => {
@@ -14,23 +14,18 @@ export const useModal = () => {
     if (modalState.setOpen !== null) {
       modalState.setOpen(false);
     }
-    if (modalState.setChild) {
-      modalState.setChild(<></>);
+    if (modalState.videoPlaylist.setVideoId) {
+      modalState.videoPlaylist.setVideoId(null);
     }
-  };
-
-  const show = (content: React.ReactNode) => {
-    if (modalState.setChild) {
-      modalState.setChild(content);
+    if (modalState.videoPlaylist.setIncludedPlaylists) {
+      modalState.videoPlaylist.setIncludedPlaylists([]);
     }
-    open();
   };
 
   return {
     openState: modalState.open,
-    content: modalState.child,
     open,
     close,
-    show,
+    videoPlaylist: modalState.videoPlaylist,
   };
 };
