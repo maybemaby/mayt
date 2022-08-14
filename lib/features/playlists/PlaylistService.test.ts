@@ -36,6 +36,18 @@ afterEach(async () => {
   await db.playlist.deleteMany({});
 });
 
+async function addVideosToPlaylist() {
+  const videos = await db.video.findMany({});
+  for (let video of videos) {
+    await db.videoPlaylist.create({
+      data: {
+        videoId: video.id,
+        playlistId: testPlaylist.id,
+      },
+    });
+  }
+}
+
 describe("PlaylistService", () => {
   test("Successfully create", async () => {
     const created = await PlaylistService.createPlaylist({
@@ -128,6 +140,46 @@ describe("PlaylistService", () => {
 
     await expect(
       PlaylistService.addVideo(testVideo.id, testPlaylist.id)
+    ).rejects.toThrow();
+  });
+
+  test("Remove video should succeed", async () => {
+    await addVideosToPlaylist();
+    const originalLength = (
+      await db.videoPlaylist.findMany({
+        where: {
+          playlistId: testPlaylist.id,
+        },
+      })
+    ).length;
+
+    const res = await PlaylistService.removeVideo(
+      testVideo.id,
+      testPlaylist.id
+    );
+
+    const newLength = (
+      await db.videoPlaylist.findMany({
+        where: {
+          playlistId: testPlaylist.id,
+        },
+      })
+    ).length;
+
+    expect(newLength).toStrictEqual(originalLength - 1);
+    expect(res.videoId).toBe(testVideo.id);
+    expect(res.playlistId).toBe(testPlaylist.id);
+  });
+
+  test("Remove non added video should fail", async () => {
+    await expect(
+      PlaylistService.removeVideo(testVideo.id, testPlaylist.id)
+    ).rejects.toThrow();
+  });
+
+  test("Remove from nonexistent playlist should fail", async () => {
+    await expect(
+      PlaylistService.removeVideo(testVideo.id, "None")
     ).rejects.toThrow();
   });
 

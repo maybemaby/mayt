@@ -110,6 +110,21 @@ async function addVideo(videoId: string, playlistId: string) {
   });
 }
 
+async function removeVideo(videoId: string, playlistId: string) {
+  return await db.videoPlaylist.delete({
+    where: {
+      videoId_playlistId: {
+        playlistId,
+        videoId,
+      },
+    },
+    select: {
+      videoId: true,
+      playlistId: true,
+    },
+  });
+}
+
 async function getAllVideos(playlistId: string) {
   return await db.videoPlaylist.findMany({
     where: {
@@ -136,6 +151,7 @@ const VideoService = {
   find,
   deleteOne,
   addVideo,
+  removeVideo,
   update,
 };
 
