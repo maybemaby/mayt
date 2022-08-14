@@ -144,6 +144,27 @@ async function togglePinned(id: string) {
   });
 }
 
+async function getOne(id: string) {
+  return await db.video.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      VideoTag: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+              type: true,
+            },
+          },
+        },
+      },
+      videoPlaylist: true,
+    },
+  });
+}
+
 const VideoService = {
   createVideo,
   deleteVideo,
@@ -151,6 +172,7 @@ const VideoService = {
   addTag,
   getPinned,
   togglePinned,
+  getOne,
 };
 
 export default VideoService;
