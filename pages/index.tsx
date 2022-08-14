@@ -8,6 +8,9 @@ import IconHeader from "../components/common/IconHeader";
 import VideoPreviewRow from "../components/VideoPreviewRow";
 import { trpc } from "../lib/utils/trpc";
 import BarLoader from "../components/common/BarLoader";
+import { useModal } from "../hooks/useModal";
+import Modal from "../components/Modal";
+import AddVideoToPlaylist from "../components/AddVideoToPlaylist";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -35,10 +38,13 @@ const StyledIconHeader = styled(IconHeader)`
 
 const Home: NextPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
+  const {
+    videoPlaylist: { videoId, includedPlaylists },
+  } = useModal();
+
   const handleSearch = (value: string) => {
     setSearchLoading(true);
     setTimeout(() => {
-      console.log(value);
       setSearchLoading(false);
     }, 300);
   };
@@ -56,6 +62,14 @@ const Home: NextPage = () => {
         <meta name="description" content="Your personal Youtube organizer" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Modal>
+        {videoId && (
+          <AddVideoToPlaylist
+            videoId={videoId}
+            playlistsIncluded={includedPlaylists ?? []}
+          />
+        )}
+      </Modal>
       <SearchBox
         commonStyle={{ margin: "30px 0px" }}
         placeholder="Search by videos by title or channel"

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
 import Menu from "./Menu";
+import { useModal } from "../hooks/useModal";
 
 type VideoPreviewProps = {
   thumbnail_url: string;
@@ -127,7 +128,12 @@ export const SmallVideoPreview = React.forwardRef(
       channel,
       channelId,
       pinned,
-    }: VideoPreviewProps & { id: string; pinned: boolean },
+      playlists,
+    }: VideoPreviewProps & {
+      id: string;
+      pinned: boolean;
+      playlists: { videoId: string; playlistId: string }[];
+    },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const utils = trpc.useContext();
@@ -145,6 +151,11 @@ export const SmallVideoPreview = React.forwardRef(
       },
     });
 
+    const {
+      open,
+      videoPlaylist: { setVideoId, setIncludedPlaylists },
+    } = useModal();
+
     const handleSelect = (value: string) => {
       const split = value.split(".");
       if (split.length < 2) {
@@ -158,7 +169,11 @@ export const SmallVideoPreview = React.forwardRef(
           clear.mutate({ id: split[1] });
           break;
         case "playlist":
-          window.alert("Added " + split[1]);
+          if (setVideoId && setIncludedPlaylists) {
+            setVideoId(split[1]);
+            setIncludedPlaylists(playlists);
+          }
+          open();
           break;
         case "tag":
           window.alert("Change tag");

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
 import BarLoader from "../../components/common/BarLoader";
 import { trpc } from "../../lib/utils/trpc";
+import Modal from "../../components/Modal";
+import AddVideoToPlaylist from "../../components/AddVideoToPlaylist";
+import { useModal } from "../../hooks/useModal";
 
 const Header = styled.h2`
   font-size: ${(props) => props.theme.fontSize[6]};
@@ -16,9 +19,21 @@ const VideosPage: NextPage = () => {
       return last.cursor;
     },
   });
+  const {
+    videoPlaylist: { videoId, includedPlaylists },
+  } = useModal();
+
   return (
     <>
       <Header>Videos</Header>
+      <Modal>
+        {videoId && (
+          <AddVideoToPlaylist
+            videoId={videoId}
+            playlistsIncluded={includedPlaylists ?? []}
+          />
+        )}
+      </Modal>
       {videos.isSuccess && videos.data && videos.isFetchedAfterMount ? (
         <VideoPreviewGrid
           videos={videos.data.pages.map((page) => page.videos).flat()}
