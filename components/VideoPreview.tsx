@@ -54,7 +54,10 @@ const Container = styled.div`
 const SmallContainer = styled(Container)`
   width: fit-content;
   max-width: 240px;
-  align-self: unset;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Info = styled.div`
@@ -92,10 +95,14 @@ const Title = styled.strong`
 
 const SmallTitle = styled.strong`
   font-size: ${(props) => props.theme.fontSize[2]};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 `;
 
 const Subtitle = styled.p`
   font-size: 1rem;
+  margin: 0;
 `;
 
 const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
