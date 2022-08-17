@@ -20,12 +20,28 @@ export const playlistRouter = trpc
   })
   .mutation("addVideo", {
     input: z.object({
-      videoId: z.string().max(50),
-      playlistId: z.string().max(50),
+      videoId: z.string().min(1).max(50),
+      playlistId: z.string().min(1).max(50),
     }),
     async resolve({ input }) {
       try {
         return await PlaylistService.addVideo(input.videoId, input.playlistId);
+      } catch (err) {
+        throw handleRouterError(err);
+      }
+    },
+  })
+  .mutation("removeVideo", {
+    input: z.object({
+      videoId: z.string().min(1).max(50),
+      playlistId: z.string().min(1).max(50),
+    }),
+    async resolve({ input }) {
+      try {
+        return await PlaylistService.removeVideo(
+          input.videoId,
+          input.playlistId
+        );
       } catch (err) {
         throw handleRouterError(err);
       }
