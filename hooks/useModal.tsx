@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { ModalContext } from "../components/ModalProvider";
 
 export const useModal = () => {
@@ -10,7 +10,7 @@ export const useModal = () => {
     }
   };
 
-  const close = () => {
+  const close = useCallback(() => {
     if (modalState.setOpen !== null) {
       modalState.setOpen(false);
     }
@@ -20,7 +20,7 @@ export const useModal = () => {
     if (modalState.videoPlaylist.setIncludedPlaylists) {
       modalState.videoPlaylist.setIncludedPlaylists([]);
     }
-  };
+  }, []);
 
   return {
     openState: modalState.open,

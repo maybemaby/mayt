@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { trpc } from "../lib/utils/trpc";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -41,24 +41,44 @@ const AddVideoToPlaylist = ({
   videoId: string;
   playlistsIncluded: { videoId: string; playlistId: string }[];
 }) => {
+  const [searchable, setSearchable] = useState(playlistsIncluded);
   const utils = trpc.useContext();
   const playlists = trpc.useQuery(["playlists.find", { size: 1000 }], {
-    cacheTime: 60,
-    refetchOnMount: false,
+    refetchOnMount: true,
   });
   const add = trpc.useMutation(["playlists.addVideo"], {
     onSuccess(input) {
+      utils.invalidateQueries(["videos.getPinned"]);
+      utils.invalidateQueries(["videos.find"]);
       utils.invalidateQueries(["videos.getOne", input.videoId]);
+      setSearchable([
+        ...searchable,
+        { videoId: input.videoId, playlistId: input.playlistId },
+      ]);
+    },
+  });
+  const remove = trpc.useMutation(["playlists.removeVideo"], {
+    onSuccess(input) {
+      utils.invalidateQueries(["videos.getPinned"]);
+      utils.invalidateQueries(["videos.find"]);
+      utils.invalidateQueries(["videos.getOne", input.videoId]);
+      setSearchable(
+        searchable.filter((pl) => pl.playlistId !== input.playlistId)
+      );
     },
   });
 
-  const handleClick = async (playlistId: string) => {
+  const handleAdd = async (playlistId: string) => {
     await add.mutateAsync({ videoId, playlistId });
   };
 
+  const handleRemove = async (playlistId: string) => {
+    await remove.mutateAsync({ videoId, playlistId });
+  };
+
   const inPlaylists = useMemo(() => {
-    return playlistsIncluded.map((pl) => pl.playlistId);
-  }, [playlistsIncluded]);
+    return searchable.map((pl) => pl.playlistId);
+  }, [searchable]);
 
   return (
     <Container>
@@ -68,17 +88,24 @@ const AddVideoToPlaylist = ({
       {playlists.data &&
         playlists.data.playlists.map((pl) => {
           return (
-            <SelectButton key={pl.id} onClick={() => handleClick(pl.id)}>
+            <>
               {inPlaylists.includes(pl.id) ? (
-                <AiOutlineMinus size={20} />
+                <SelectButton key={pl.id} onClick={() => handleRemove(pl.id)}>
+                  <AiOutlineMinus size={20} />
+                  {pl.name}
+                </SelectButton>
               ) : (
-                <AiOutlinePlus size={20} />
+                <SelectButton key={pl.id} onClick={() => handleAdd(pl.id)}>
+                  <AiOutlinePlus size={20} />
+                  {pl.name}
+                </SelectButton>
               )}
-              {pl.name}
-            </SelectButton>
+            </>
           );
         })}
       {add.isSuccess && <div style={{ color: "#3da859" }}>Added!</div>}
+      {remove.isSuccess && <div style={{ color: "#3da859" }}>Removed!</div>}
+      {remove.isError && <div style={{ color: "red" }}>Failed to remove.</div>}
       {add.isError && add.error.message.includes("duplicate") && (
         <div style={{ color: "red" }}>Already in playlist</div>
       )}
