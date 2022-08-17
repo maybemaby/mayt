@@ -106,6 +106,7 @@ afterEach(async () => {
 
 afterAll(async () => {
   await db.tag.deleteMany({});
+  await db.tagType.deleteMany({});
 });
 
 describe("VideoService", () => {
