@@ -5,7 +5,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useModal } from "../../hooks/useModal";
 import BarLoader from "../../components/common/BarLoader";
 import { IconButton } from "../../components/common/IconButton";
-import PlaylistPreview from "../../components/PlaylistPreview";
+import PlaylistPreviewGrid from "../../components/PlaylistPreviewGrid";
 import { trpc } from "../../lib/utils/trpc";
 import Modal from "../../components/Modal";
 
@@ -152,9 +152,14 @@ const PlaylistPage: NextPage = () => {
           {playlistData.length === 0 && (
             <div style={{ margin: "auto" }}>No Playlists Found</div>
           )}
-          {playlistData.map((pl) => {
-            return <PlaylistPreview playlist={pl} key={pl.id} />;
-          })}
+          <PlaylistPreviewGrid
+            commonStyle={{ margin: "40px 0" }}
+            playlists={playlistData}
+            loading={playlists.isFetchingNextPage}
+            onLoad={() => {
+              if (playlists.hasNextPage) playlists.fetchNextPage();
+            }}
+          />
         </>
       ) : playlists.isFetching ? (
         <div style={{ margin: "auto" }}>
