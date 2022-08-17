@@ -8,7 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  margin: 30px;
+  margin: 30px 0;
   max-height: 500px;
   overflow-y: auto;
   width: 100%;
@@ -16,8 +16,8 @@ const Container = styled.div`
 `;
 
 const SelectButton = styled.button`
-  width: 100%;
   background-color: transparent;
+  min-width: 50px;
   border: none;
   font-family: inherit;
   font-weight: ${(props) => props.theme.fontWeights.subtitle};
@@ -26,12 +26,27 @@ const SelectButton = styled.button`
   flex-direction: row;
   gap: 10px;
   align-items: center;
+  flex-grow: 5;
+  flex-basis: 1;
+  flex-shrink: 1;
 
   &:hover,
   &:active {
     background-color: ${({ theme }) => theme.color.grey[300]};
     cursor: pointer;
   }
+`;
+
+const Label = styled.span`
+  flex-grow: 1;
+  flex-basis: 1;
+  flex-shrink: 5;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-align: start;
 `;
 
 const AddVideoToPlaylist = ({
@@ -92,12 +107,12 @@ const AddVideoToPlaylist = ({
               {inPlaylists.includes(pl.id) ? (
                 <SelectButton key={pl.id} onClick={() => handleRemove(pl.id)}>
                   <AiOutlineMinus size={20} />
-                  {pl.name}
+                  <Label>{pl.name}</Label>
                 </SelectButton>
               ) : (
                 <SelectButton key={pl.id} onClick={() => handleAdd(pl.id)}>
                   <AiOutlinePlus size={20} />
-                  {pl.name}
+                  <Label>{pl.name}</Label>
                 </SelectButton>
               )}
             </>
