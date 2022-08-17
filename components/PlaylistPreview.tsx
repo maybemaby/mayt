@@ -4,6 +4,7 @@ import React from "react";
 import BaseRow from "./common/BaseRow";
 import Menu from "./Menu";
 import { trpc } from "../lib/utils/trpc";
+import type { PlaylistLike } from "../lib/types";
 
 const Container = styled.div`
   display: flex;
@@ -39,25 +40,6 @@ const Title = styled.strong`
   font-size: ${(props) => props.theme.fontSize[2]};
   font-family: "Nunito", "Segoe UI", sans-serif;
 `;
-
-type PlaylistLike = {
-  id: string;
-  name: string;
-  createdAt: Date;
-  _count: {
-    videoPlaylist: number;
-  };
-  videoPlaylist: {
-    videoId: string;
-    playlistId: string;
-    addedAt: Date;
-    video: {
-      id: string;
-      name: string;
-      thumbnail_url: string | null;
-    };
-  }[];
-};
 
 type PlaylistPreviewProps = {
   playlist: PlaylistLike;
