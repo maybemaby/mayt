@@ -69,6 +69,9 @@ async function find(options: FindPlaylistOptions) {
             },
           },
         },
+        orderBy: {
+          addedAt: "desc",
+        },
         take: 1,
       },
     },
