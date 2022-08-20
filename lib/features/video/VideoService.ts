@@ -5,7 +5,7 @@ import FindOptions from "../../types/FindOptions";
 type FindVideoOptions = FindOptions & {
   channelId?: string;
   orderBy?: {
-    addedAt: "desc" | "asc";
+    addedAt?: "desc" | "asc";
   };
   matchingTags?: string[];
 };
@@ -58,8 +58,8 @@ async function findVideos(options: FindVideoOptions) {
     where: {
       channelId: options.channelId,
     },
-    orderBy: {
-      addedAt: options.orderBy?.addedAt || "desc",
+    orderBy: options.orderBy ?? {
+      addedAt: "desc",
     },
   };
 
@@ -82,24 +82,6 @@ async function findVideos(options: FindVideoOptions) {
     };
   }
 
-  if (options.cursor) {
-    return await db.video.findMany({
-      ...params,
-      include: {
-        channel: true,
-        VideoTag: {
-          include: {
-            tag: {
-              select: {
-                name: true,
-                type: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
   return await db.video.findMany({
     ...params,
     include: {
@@ -114,6 +96,7 @@ async function findVideos(options: FindVideoOptions) {
           },
         },
       },
+      videoPlaylist: true,
     },
   });
 }
@@ -125,6 +108,7 @@ async function getPinned(size: number) {
     },
     include: {
       channel: true,
+      videoPlaylist: true,
     },
     take: size,
   });
@@ -160,6 +144,27 @@ async function togglePinned(id: string) {
   });
 }
 
+async function getOne(id: string) {
+  return await db.video.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      VideoTag: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+              type: true,
+            },
+          },
+        },
+      },
+      videoPlaylist: true,
+    },
+  });
+}
+
 const VideoService = {
   createVideo,
   deleteVideo,
@@ -167,6 +172,7 @@ const VideoService = {
   addTag,
   getPinned,
   togglePinned,
+  getOne,
 };
 
 export default VideoService;

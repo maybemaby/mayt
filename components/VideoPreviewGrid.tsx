@@ -1,9 +1,9 @@
-import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import { VideoLike } from "../lib/types";
 import { SmallVideoPreview } from "./VideoPreview";
 import { CommonStyle } from "../lib/types/CommonStyle";
 import BarLoader from "./common/BarLoader";
+import BaseGrid from "./common/BaseGrid";
 
 type VideoPreviewGridProps<T extends VideoLike> = {
   commonStyle?: CommonStyle;
@@ -11,35 +11,6 @@ type VideoPreviewGridProps<T extends VideoLike> = {
   onLoad(): void;
   loading: boolean;
 };
-
-const GridContainer = styled.div<CommonStyle>`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-row-gap: 20px;
-  grid-column-gap: 5px;
-  justify-content: center;
-  justify-items: center;
-  align-items: start;
-  width: ${(props) => props.width ?? "100%"};
-  padding: ${(props) => props.padding};
-  margin: ${(props) => props.margin};
-
-  @media screen and (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (min-width: 1280px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media screen and (min-width: 1440px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
-`;
 
 function VideoPreviewGrid<T extends VideoLike>({
   commonStyle,
@@ -60,7 +31,7 @@ function VideoPreviewGrid<T extends VideoLike>({
 
   return (
     <>
-      <GridContainer {...commonStyle}>
+      <BaseGrid {...commonStyle}>
         {videos.map((video, index) => {
           if (index === videos.length - 1) {
             return (
@@ -73,6 +44,7 @@ function VideoPreviewGrid<T extends VideoLike>({
                 title={video.name}
                 thumbnail_url={video.thumbnail_url ?? ""}
                 channelId={video.channel?.id}
+                playlists={video.videoPlaylist}
               />
             );
           }
@@ -85,10 +57,11 @@ function VideoPreviewGrid<T extends VideoLike>({
               title={video.name}
               thumbnail_url={video.thumbnail_url ?? ""}
               channelId={video.channel?.id}
+              playlists={video.videoPlaylist}
             />
           );
         })}
-      </GridContainer>
+      </BaseGrid>
       {loading && (
         <div style={{ margin: " 20px auto" }}>
           <BarLoader />

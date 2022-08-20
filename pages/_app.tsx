@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { lightTheme } from "../theme";
+import ModalProvider from "../components/ModalProvider";
 import { WithSidebar } from "../components/layouts/WithSidebar";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "./api/trpc/[trpc]";
@@ -46,9 +47,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyle />
-        <WithSidebar>
-          <Component {...pageProps} />
-        </WithSidebar>
+        <ModalProvider>
+          <WithSidebar>
+            <Component {...pageProps} />
+          </WithSidebar>
+        </ModalProvider>
       </ThemeProvider>
     </>
   );

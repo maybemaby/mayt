@@ -1,13 +1,9 @@
 import * as trpc from "@trpc/server";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { z } from "zod";
 import VideoService from "./VideoService";
 import { postVideoSchema } from "./models/Video";
 import { getQuerySchema } from "./schema/GetQuery";
-import {
-  prismaKnownErrorToTrpc,
-  defaultServerError,
-} from "../../utils/errorHandlers";
+import { handleRouterError } from "../../utils/errorHandlers";
 
 export const videoRouter = trpc
   .router()
@@ -18,11 +14,7 @@ export const videoRouter = trpc
         const video = await VideoService.createVideo(input);
         return video;
       } catch (err) {
-        if (err instanceof PrismaClientKnownRequestError) {
-          throw prismaKnownErrorToTrpc(err);
-        } else {
-          throw defaultServerError;
-        }
+        throw handleRouterError(err);
       }
     },
   })
@@ -31,8 +23,12 @@ export const videoRouter = trpc
       id: z.string(),
     }),
     async resolve({ input: { id } }) {
-      await VideoService.deleteVideo(id);
-      return { id };
+      try {
+        await VideoService.deleteVideo(id);
+        return { id };
+      } catch (err) {
+        throw handleRouterError(err);
+      }
     },
   })
   .query("getPinned", {
@@ -59,6 +55,12 @@ export const videoRouter = trpc
       }
       const cursor = videos[videos.length - 1].id;
       return { videos, cursor };
+    },
+  })
+  .query("getOne", {
+    input: z.string().min(1).max(50),
+    async resolve({ input }) {
+      return await VideoService.getOne(input);
     },
   })
   .mutation("addTag", {

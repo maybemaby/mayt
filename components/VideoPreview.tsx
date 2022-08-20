@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
 import Menu from "./Menu";
+import { useModal } from "../hooks/useModal";
 
 type VideoPreviewProps = {
   thumbnail_url: string;
@@ -53,7 +54,10 @@ const Container = styled.div`
 const SmallContainer = styled(Container)`
   width: fit-content;
   max-width: 240px;
-  align-self: unset;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Info = styled.div`
@@ -91,10 +95,18 @@ const Title = styled.strong`
 
 const SmallTitle = styled.strong`
   font-size: ${(props) => props.theme.fontSize[2]};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  width: 100%;
 `;
 
 const Subtitle = styled.p`
   font-size: 1rem;
+  margin: 0;
 `;
 
 const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
@@ -127,7 +139,12 @@ export const SmallVideoPreview = React.forwardRef(
       channel,
       channelId,
       pinned,
-    }: VideoPreviewProps & { id: string; pinned: boolean },
+      playlists,
+    }: VideoPreviewProps & {
+      id: string;
+      pinned: boolean;
+      playlists: { videoId: string; playlistId: string }[];
+    },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const utils = trpc.useContext();
@@ -145,6 +162,11 @@ export const SmallVideoPreview = React.forwardRef(
       },
     });
 
+    const {
+      open,
+      videoPlaylist: { setVideoId, setIncludedPlaylists },
+    } = useModal();
+
     const handleSelect = (value: string) => {
       const split = value.split(".");
       if (split.length < 2) {
@@ -158,7 +180,11 @@ export const SmallVideoPreview = React.forwardRef(
           clear.mutate({ id: split[1] });
           break;
         case "playlist":
-          window.alert("Added " + split[1]);
+          if (setVideoId && setIncludedPlaylists) {
+            setVideoId(split[1]);
+            setIncludedPlaylists(playlists);
+          }
+          open();
           break;
         case "tag":
           window.alert("Change tag");
@@ -196,7 +222,7 @@ export const SmallVideoPreview = React.forwardRef(
           />
         </SmallImageContainer>
         <SmallInfo>
-          <SmallTitle>{title}</SmallTitle>
+          <SmallTitle title={title}>{title}</SmallTitle>
           <BaseRow width={"100%"} justify={"space-between"}>
             <Link href={`/channels/${channelId}`}>
               <a>

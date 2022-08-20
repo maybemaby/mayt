@@ -7,4 +7,8 @@ export interface VideoLike {
   } | null;
   thumbnail_url: string | null;
   pinned: boolean | null;
+  videoPlaylist: {
+    videoId: string;
+    playlistId: string;
+  }[];
 }

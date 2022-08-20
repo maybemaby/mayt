@@ -28,6 +28,7 @@ const Row = styled.div<{ flexWrap?: boolean }>`
   gap: 20px;
   overflow-x: auto;
   flex-wrap: ${(props) => (props.flexWrap ? "wrap" : "nowrap")};
+  padding-bottom: 10px;
 
   @media screen and (min-width: 768px) {
     margin: 0;
@@ -69,6 +70,7 @@ function VideoPreviewRow<T extends VideoLike>({
             thumbnail_url={video.thumbnail_url ?? ""}
             title={video.name}
             pinned={video.pinned ?? false}
+            playlists={video.videoPlaylist}
           />
         ))}
       </Row>
