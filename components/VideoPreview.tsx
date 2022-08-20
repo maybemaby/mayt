@@ -98,6 +98,10 @@ const SmallTitle = styled.strong`
   text-overflow: ellipsis;
   overflow: hidden;
   width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  width: 100%;
 `;
 
 const Subtitle = styled.p`
@@ -218,7 +222,7 @@ export const SmallVideoPreview = React.forwardRef(
           />
         </SmallImageContainer>
         <SmallInfo>
-          <SmallTitle>{title}</SmallTitle>
+          <SmallTitle title={title}>{title}</SmallTitle>
           <BaseRow width={"100%"} justify={"space-between"}>
             <Link href={`/channels/${channelId}`}>
               <a>

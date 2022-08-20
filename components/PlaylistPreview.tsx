@@ -95,7 +95,7 @@ const PlaylistPreview = React.forwardRef(function PlaylistPreview(
         )}
       </SmallImageContainer>
       <Description>
-        <Title>{playlist.name}</Title>
+        <Title title={playlist.name}>{playlist.name}</Title>
         <BaseRow width={"100%"} justify={"space-between"}>
           <span>{playlist._count.videoPlaylist} Videos</span>
           <Menu options={options} onSelect={handleMenuSelect} />
