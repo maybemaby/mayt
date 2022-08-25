@@ -11,6 +11,7 @@ import BarLoader from "../components/common/BarLoader";
 import { useModal } from "../hooks/useModal";
 import Modal from "../components/Modal";
 import AddVideoToPlaylist from "../components/AddVideoToPlaylist";
+import UpdateTagsModal from "../components/UpdateTagsModal";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -40,6 +41,7 @@ const Home: NextPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const {
     videoPlaylist: { videoId, includedPlaylists },
+    tagModal,
   } = useModal();
 
   const handleSearch = (value: string) => {
@@ -69,6 +71,7 @@ const Home: NextPage = () => {
             playlistsIncluded={includedPlaylists ?? []}
           />
         )}
+        {tagModal.videoId && <UpdateTagsModal videoId={tagModal.videoId} />}
       </Modal>
       <SearchBox
         commonStyle={{ margin: "30px 0px" }}

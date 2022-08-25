@@ -165,6 +165,7 @@ export const SmallVideoPreview = React.forwardRef(
     const {
       open,
       videoPlaylist: { setVideoId, setIncludedPlaylists },
+      tagModal,
     } = useModal();
 
     const handleSelect = (value: string) => {
@@ -187,7 +188,10 @@ export const SmallVideoPreview = React.forwardRef(
           open();
           break;
         case "tag":
-          window.alert("Change tag");
+          if (tagModal.setVideoId) {
+            tagModal.setVideoId(split[1]);
+          }
+          open();
           break;
         default:
           console.log(split[0]);
