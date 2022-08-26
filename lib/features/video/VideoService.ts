@@ -109,6 +109,16 @@ async function getPinned(size: number) {
     include: {
       channel: true,
       videoPlaylist: true,
+      VideoTag: {
+        include: {
+          tag: {
+            select: {
+              name: true,
+              type: true,
+            },
+          },
+        },
+      },
     },
     take: size,
   });
@@ -119,6 +129,17 @@ async function addTag(videoId: string, tagId: string) {
     data: {
       tagId: tagId,
       videoId: videoId,
+    },
+  });
+}
+
+async function removeTag(videoId: string, tagId: string) {
+  return await db.videoTag.delete({
+    where: {
+      videoId_tagId: {
+        tagId,
+        videoId,
+      },
     },
   });
 }
@@ -170,6 +191,7 @@ const VideoService = {
   deleteVideo,
   findVideos,
   addTag,
+  removeTag,
   getPinned,
   togglePinned,
   getOne,

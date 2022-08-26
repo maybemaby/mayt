@@ -69,7 +69,24 @@ export const videoRouter = trpc
       tagId: z.string(),
     }),
     async resolve({ input }) {
-      return await VideoService.addTag(input.videoId, input.tagId);
+      try {
+        return await VideoService.addTag(input.videoId, input.tagId);
+      } catch (e) {
+        throw handleRouterError(e);
+      }
+    },
+  })
+  .mutation("removeTag", {
+    input: z.object({
+      videoId: z.string(),
+      tagId: z.string(),
+    }),
+    async resolve({ input }) {
+      try {
+        return await VideoService.removeTag(input.videoId, input.tagId);
+      } catch (e) {
+        throw handleRouterError(e);
+      }
     },
   })
   .mutation("togglePinned", {
