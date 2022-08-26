@@ -140,10 +140,12 @@ export const SmallVideoPreview = React.forwardRef(
       channelId,
       pinned,
       playlists,
+      tags,
     }: VideoPreviewProps & {
       id: string;
       pinned: boolean;
       playlists: { videoId: string; playlistId: string }[];
+      tags: { videoId: string; tagId: string }[];
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
@@ -188,8 +190,9 @@ export const SmallVideoPreview = React.forwardRef(
           open();
           break;
         case "tag":
-          if (tagModal.setVideoId) {
+          if (tagModal.setVideoId && tagModal.setVideoTags) {
             tagModal.setVideoId(split[1]);
+            tagModal.setVideoTags(tags.map((tag) => tag.tagId));
           }
           open();
           break;

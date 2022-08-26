@@ -1,18 +1,19 @@
 import { useInView } from "react-intersection-observer";
-import { VideoLike } from "../lib/types";
+import { VideoFindReturn } from "../lib/types";
 import { SmallVideoPreview } from "./VideoPreview";
 import { CommonStyle } from "../lib/types/CommonStyle";
 import BarLoader from "./common/BarLoader";
 import BaseGrid from "./common/BaseGrid";
+import { Unpacked } from "../lib/types/Unpacked";
 
-type VideoPreviewGridProps<T extends VideoLike> = {
+type VideoPreviewGridProps<T extends Unpacked<VideoFindReturn["videos"]>> = {
   commonStyle?: CommonStyle;
   videos: T[];
   onLoad(): void;
   loading: boolean;
 };
 
-function VideoPreviewGrid<T extends VideoLike>({
+function VideoPreviewGrid<T extends Unpacked<VideoFindReturn["videos"]>>({
   commonStyle,
   videos,
   onLoad,
@@ -45,6 +46,7 @@ function VideoPreviewGrid<T extends VideoLike>({
                 thumbnail_url={video.thumbnail_url ?? ""}
                 channelId={video.channel?.id}
                 playlists={video.videoPlaylist}
+                tags={video.VideoTag}
               />
             );
           }
@@ -58,6 +60,7 @@ function VideoPreviewGrid<T extends VideoLike>({
               thumbnail_url={video.thumbnail_url ?? ""}
               channelId={video.channel?.id}
               playlists={video.videoPlaylist}
+              tags={video.VideoTag}
             />
           );
         })}
