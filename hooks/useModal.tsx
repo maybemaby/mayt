@@ -23,6 +23,9 @@ export const useModal = () => {
     if (modalState.tagModal.setVideoId) {
       modalState.tagModal.setVideoId(null);
     }
+    if (modalState.tagModal.setVideoTags) {
+      modalState.tagModal.setVideoTags([]);
+    }
   }, []);
 
   return {

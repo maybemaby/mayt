@@ -6,6 +6,7 @@ import { trpc } from "../../lib/utils/trpc";
 import Modal from "../../components/Modal";
 import AddVideoToPlaylist from "../../components/AddVideoToPlaylist";
 import { useModal } from "../../hooks/useModal";
+import UpdateTagsModal from "../../components/UpdateTagsModal";
 
 const Header = styled.h2`
   font-size: ${(props) => props.theme.fontSize[6]};
@@ -21,6 +22,7 @@ const VideosPage: NextPage = () => {
   });
   const {
     videoPlaylist: { videoId, includedPlaylists },
+    tagModal,
   } = useModal();
 
   return (
@@ -31,6 +33,12 @@ const VideosPage: NextPage = () => {
           <AddVideoToPlaylist
             videoId={videoId}
             playlistsIncluded={includedPlaylists ?? []}
+          />
+        )}
+        {tagModal.videoId && (
+          <UpdateTagsModal
+            videoId={tagModal.videoId}
+            existingTags={tagModal.videoTags ?? []}
           />
         )}
       </Modal>

@@ -50,7 +50,7 @@ const Home: NextPage = () => {
       setSearchLoading(false);
     }, 300);
   };
-  const latest = trpc.useQuery(["videos.find", {}], {
+  const latest = trpc.useQuery(["videos.find", { size: 20 }], {
     staleTime: 60,
   });
   const pinned = trpc.useQuery(["videos.getPinned", {}], {
@@ -71,7 +71,12 @@ const Home: NextPage = () => {
             playlistsIncluded={includedPlaylists ?? []}
           />
         )}
-        {tagModal.videoId && <UpdateTagsModal videoId={tagModal.videoId} />}
+        {tagModal.videoId && (
+          <UpdateTagsModal
+            videoId={tagModal.videoId}
+            existingTags={tagModal.videoTags ?? []}
+          />
+        )}
       </Modal>
       <SearchBox
         commonStyle={{ margin: "30px 0px" }}

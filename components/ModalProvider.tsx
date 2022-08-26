@@ -21,6 +21,8 @@ type ModalStore = {
   tagModal: {
     videoId: string | null;
     setVideoId: React.Dispatch<React.SetStateAction<string | null>> | null;
+    videoTags: string[] | null;
+    setVideoTags: React.Dispatch<React.SetStateAction<string[] | null>> | null;
   };
 };
 
@@ -36,6 +38,8 @@ export const ModalContext = createContext<ModalStore>({
   tagModal: {
     videoId: null,
     setVideoId: null,
+    videoTags: null,
+    setVideoTags: null,
   },
 });
 
@@ -46,6 +50,7 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
     PlaylistLike[] | null
   >(null);
   const [tagVideoId, setTagVideoId] = useState<string | null>(null);
+  const [videoTags, setVideoTags] = useState<string[] | null>(null);
 
   return (
     <ModalContext.Provider
@@ -61,6 +66,8 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
         tagModal: {
           videoId: tagVideoId,
           setVideoId: setTagVideoId,
+          videoTags: videoTags,
+          setVideoTags: setVideoTags,
         },
       }}
     >

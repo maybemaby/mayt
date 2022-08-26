@@ -28,6 +28,7 @@ const Container = styled.div`
   min-height: 100px;
   min-width: 300px;
   padding: 20px;
+  margin: 0 10px;
   z-index: 100;
   border-radius: 15px;
   display: flex;
