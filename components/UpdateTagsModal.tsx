@@ -26,6 +26,7 @@ const Container = styled.div`
   font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   height: 500px;
   width: 90%;
+  padding: 10px;
 
   @media screen and (min-width: 768px) {
     width: 600px;
