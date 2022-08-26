@@ -11,6 +11,7 @@ import BarLoader from "../components/common/BarLoader";
 import { useModal } from "../hooks/useModal";
 import Modal from "../components/Modal";
 import AddVideoToPlaylist from "../components/AddVideoToPlaylist";
+import UpdateTagsModal from "../components/UpdateTagsModal";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -40,6 +41,7 @@ const Home: NextPage = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const {
     videoPlaylist: { videoId, includedPlaylists },
+    tagModal,
   } = useModal();
 
   const handleSearch = (value: string) => {
@@ -48,7 +50,7 @@ const Home: NextPage = () => {
       setSearchLoading(false);
     }, 300);
   };
-  const latest = trpc.useQuery(["videos.find", {}], {
+  const latest = trpc.useQuery(["videos.find", { size: 20 }], {
     staleTime: 60,
   });
   const pinned = trpc.useQuery(["videos.getPinned", {}], {
@@ -67,6 +69,12 @@ const Home: NextPage = () => {
           <AddVideoToPlaylist
             videoId={videoId}
             playlistsIncluded={includedPlaylists ?? []}
+          />
+        )}
+        {tagModal.videoId && (
+          <UpdateTagsModal
+            videoId={tagModal.videoId}
+            existingTags={tagModal.videoTags ?? []}
           />
         )}
       </Modal>

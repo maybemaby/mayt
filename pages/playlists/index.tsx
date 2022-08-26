@@ -21,7 +21,6 @@ const Header = styled.h2`
 const StyledIconButton = styled(IconButton)`
   font-family: inherit;
   background-color: transparent;
-  border: 3px solid ${(props) => props.theme.color.primary[600]};
   font-size: 1.2rem;
   padding: 10px;
   border-radius: 5px;

@@ -140,10 +140,12 @@ export const SmallVideoPreview = React.forwardRef(
       channelId,
       pinned,
       playlists,
+      tags,
     }: VideoPreviewProps & {
       id: string;
       pinned: boolean;
       playlists: { videoId: string; playlistId: string }[];
+      tags: { videoId: string; tagId: string }[];
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
@@ -165,6 +167,7 @@ export const SmallVideoPreview = React.forwardRef(
     const {
       open,
       videoPlaylist: { setVideoId, setIncludedPlaylists },
+      tagModal,
     } = useModal();
 
     const handleSelect = (value: string) => {
@@ -187,7 +190,11 @@ export const SmallVideoPreview = React.forwardRef(
           open();
           break;
         case "tag":
-          window.alert("Change tag");
+          if (tagModal.setVideoId && tagModal.setVideoTags) {
+            tagModal.setVideoId(split[1]);
+            tagModal.setVideoTags(tags.map((tag) => tag.tagId));
+          }
+          open();
           break;
         default:
           console.log(split[0]);

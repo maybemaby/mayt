@@ -1,3 +1,7 @@
+import type { InferQueryOutput } from "../utils/trpc";
+
+export type VideoFindReturn = InferQueryOutput<"videos.find">;
+
 export interface VideoLike {
   id: string;
   name: string;

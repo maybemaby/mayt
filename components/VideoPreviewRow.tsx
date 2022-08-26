@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import type { VideoLike } from "../lib/types";
+import type { VideoFindReturn, VideoLike } from "../lib/types";
 import type { CommonStyle } from "../lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
 import BarLoader from "./common/BarLoader";
+import { Unpacked } from "../lib/types/Unpacked";
 
 const Section = styled.section<CommonStyle>`
   margin: 20px auto;
@@ -37,15 +38,16 @@ const Row = styled.div<{ flexWrap?: boolean }>`
   }
 `;
 
-type VideoPreviewRowProps<TVideo extends VideoLike> = {
-  id: string;
-  videos: TVideo[];
-  loading?: boolean;
-  commonStyle?: CommonStyle;
-  flexWrap?: boolean;
-};
+type VideoPreviewRowProps<TVideo extends Unpacked<VideoFindReturn["videos"]>> =
+  {
+    id: string;
+    videos: TVideo[];
+    loading?: boolean;
+    commonStyle?: CommonStyle;
+    flexWrap?: boolean;
+  };
 
-function VideoPreviewRow<T extends VideoLike>({
+function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
   id,
   videos,
   commonStyle,
@@ -71,6 +73,7 @@ function VideoPreviewRow<T extends VideoLike>({
             title={video.name}
             pinned={video.pinned ?? false}
             playlists={video.videoPlaylist}
+            tags={video.VideoTag}
           />
         ))}
       </Row>

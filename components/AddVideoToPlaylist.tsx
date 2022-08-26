@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { trpc } from "../lib/utils/trpc";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const Container = styled.div`
   display: flex;

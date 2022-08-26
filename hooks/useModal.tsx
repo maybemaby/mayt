@@ -20,6 +20,12 @@ export const useModal = () => {
     if (modalState.videoPlaylist.setIncludedPlaylists) {
       modalState.videoPlaylist.setIncludedPlaylists([]);
     }
+    if (modalState.tagModal.setVideoId) {
+      modalState.tagModal.setVideoId(null);
+    }
+    if (modalState.tagModal.setVideoTags) {
+      modalState.tagModal.setVideoTags([]);
+    }
   }, []);
 
   return {
@@ -27,5 +33,6 @@ export const useModal = () => {
     open,
     close,
     videoPlaylist: modalState.videoPlaylist,
+    tagModal: modalState.tagModal,
   };
 };
