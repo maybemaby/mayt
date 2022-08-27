@@ -55,6 +55,7 @@ const VideoFilterForm = ({ channels, submitHandler }: VideoFilterFormProps) => {
   const tags = trpc.useQuery(["tags.find", {}]);
 
   const onSubmit: SubmitHandler<VideoForm> = (values) => {
+    console.log(values);
     if (values.orderBy) {
       const [sortProp, sortOrder] = values.orderBy.prop.split(".") as [
         "name" | "addedAt",
@@ -104,11 +105,10 @@ const VideoFilterForm = ({ channels, submitHandler }: VideoFilterFormProps) => {
             required: false,
           })}
         >
-          <option value={""}></option>
-          <option value={"addedAt.asc"}>Added At &#8593;</option>
           <option value={"addedAt.desc"}>Added At &#8595;</option>
-          <option value={"name.asc"}>Name &#8593;</option>
+          <option value={"addedAt.asc"}>Added At &#8593;</option>
           <option value={"name.desc"}>Name &#8595;</option>
+          <option value={"name.asc"}>Name &#8593;</option>
         </select>
       </Field>
 
