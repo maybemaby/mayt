@@ -39,7 +39,7 @@ const Container = styled.nav<
   flex-direction: column;
   color: ${(props) => props.color ?? props.theme.color.primary[500]};
   background-color: ${(props) =>
-    props.backgroundColor ?? props.theme.color.grey[300]};
+    props.backgroundColor ?? props.theme.color.grey[200]};
   padding: ${(props) => props.padding};
   z-index: ${(props) => props.zIndex ?? 5};
   border-right: 2px solid ${(props) => props.theme.color.primary[600]};

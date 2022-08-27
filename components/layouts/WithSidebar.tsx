@@ -35,6 +35,7 @@ export const WithSidebar = ({ children }: WithSidebarProps) => {
 
   useEffect(() => {
     close();
+    setShowSidebar(false);
   }, [route, close]);
 
   return (
