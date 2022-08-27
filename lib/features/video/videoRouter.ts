@@ -11,8 +11,7 @@ export const videoRouter = trpc
     input: postVideoSchema,
     async resolve({ input }) {
       try {
-        const video = await VideoService.createVideo(input);
-        return video;
+        return await VideoService.createVideo(input);
       } catch (err) {
         throw handleRouterError(err);
       }
@@ -47,6 +46,7 @@ export const videoRouter = trpc
         cursor: input.cursor ?? undefined,
         size: input.size,
         matchingTags: input.tags,
+        orderBy: input.orderBy ? { ...input.orderBy } : undefined,
       });
       if (input.size && videos.length < input.size) {
         return { videos, cursor: null };

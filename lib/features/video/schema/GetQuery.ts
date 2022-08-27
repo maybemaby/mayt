@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-const orderSchema = z.enum(["asc", "desc"]).optional();
+const orderSchema = z.enum(["asc", "desc"]);
+const orderProps = z.enum(["name", "addedAt"]);
 
 export const getQuerySchema = z.object({
   cursor: z.string().nullish(),
@@ -19,7 +20,8 @@ export const getQuerySchema = z.object({
     .optional(),
   orderBy: z
     .object({
-      addedAt: orderSchema,
+      prop: orderProps,
+      direction: orderSchema,
     })
     .optional(),
 });

@@ -5,7 +5,8 @@ import FindOptions from "../../types/FindOptions";
 type FindVideoOptions = FindOptions & {
   channelId?: string;
   orderBy?: {
-    addedAt?: "desc" | "asc";
+    direction: "desc" | "asc";
+    prop: "name" | "addedAt";
   };
   matchingTags?: string[];
 };
@@ -58,10 +59,25 @@ async function findVideos(options: FindVideoOptions) {
     where: {
       channelId: options.channelId,
     },
-    orderBy: options.orderBy ?? {
-      addedAt: "desc",
-    },
   };
+
+  // Coerce options into correct orderBy, or sort by most recent video by default.
+  switch (options.orderBy?.prop) {
+    case "addedAt":
+      params.orderBy = {
+        addedAt: options.orderBy.direction,
+      };
+      break;
+    case "name":
+      params.orderBy = {
+        name: options.orderBy.direction,
+      };
+      break;
+    default:
+      params.orderBy = {
+        addedAt: "desc",
+      };
+  }
 
   if (options.cursor) {
     params.cursor = {

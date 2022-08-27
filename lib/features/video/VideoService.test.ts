@@ -165,7 +165,8 @@ describe("VideoService", () => {
   test("Should order asc", async () => {
     const found = await VideoService.findVideos({
       orderBy: {
-        addedAt: "asc",
+        prop: "addedAt",
+        direction: "asc",
       },
     });
 
