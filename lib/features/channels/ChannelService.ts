@@ -1,4 +1,5 @@
 import db from "../../data";
+import FindOptions from "../../types/FindOptions";
 import type { PostChannelDto } from "../video/models/Channel";
 
 /**
@@ -29,9 +30,33 @@ async function createOrUpdateChannel(dto: PostChannelDto) {
   });
 }
 
+interface ChannelFilter extends FindOptions {
+  nameContains?: string;
+}
+
+async function getChannels(options: ChannelFilter) {
+  const params: Parameters<typeof db.channel.findMany>[0] = {
+    take: options.size,
+    where: {
+      name: {
+        contains: options.nameContains,
+      },
+    },
+  };
+
+  if (options.cursor) {
+    params.cursor = {
+      id: options.cursor,
+    };
+  }
+
+  return await db.channel.findMany({ ...params });
+}
+
 const ChannelService = {
   findChannel,
   createOrUpdateChannel,
+  getChannels,
 };
 
 export default ChannelService;

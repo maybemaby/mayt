@@ -23,4 +23,14 @@ export const channelRouter = trpc
     async resolve({ input }) {
       return await ChannelService.findChannel(input.id);
     },
+  })
+  .query("getChannels", {
+    input: z.object({
+      size: z.number().int().optional(),
+      cursor: z.string().min(1).optional(),
+      nameContains: z.string().min(1).optional(),
+    }),
+    async resolve({ input }) {
+      return await ChannelService.getChannels({ ...input });
+    },
   });
