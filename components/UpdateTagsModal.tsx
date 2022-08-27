@@ -24,7 +24,7 @@ const Container = styled.div`
   margin: 30px 20px;
   overflow-y: auto;
   font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  height: 500px;
+  height: 300px;
   width: 90%;
   padding: 10px;
 
