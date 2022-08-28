@@ -5,4 +5,5 @@ export type VideoForm = {
     prop: "addedAt" | "name";
     direction: "asc" | "desc";
   };
+  query?: string;
 };

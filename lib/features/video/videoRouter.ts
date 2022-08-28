@@ -47,6 +47,7 @@ export const videoRouter = trpc
         size: input.size,
         matchingTags: input.tags,
         orderBy: input.orderBy ? { ...input.orderBy } : undefined,
+        query: input.query,
       });
       if (input.size && videos.length < input.size) {
         return { videos, cursor: null };

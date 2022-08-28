@@ -24,4 +24,5 @@ export const getQuerySchema = z.object({
       direction: orderSchema,
     })
     .optional(),
+  query: z.string().min(1).optional(),
 });

@@ -9,6 +9,7 @@ type FindVideoOptions = FindOptions & {
     prop: "name" | "addedAt";
   };
   matchingTags?: string[];
+  query?: string;
 };
 
 /**
@@ -58,6 +59,10 @@ async function findVideos(options: FindVideoOptions) {
     take: options.size || 20,
     where: {
       channelId: options.channelId,
+      name: {
+        contains: options.query,
+        mode: "insensitive",
+      },
     },
   };
 
@@ -92,6 +97,7 @@ async function findVideos(options: FindVideoOptions) {
         tag: {
           name: {
             in: options.matchingTags,
+            mode: "insensitive",
           },
         },
       },

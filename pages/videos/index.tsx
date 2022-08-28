@@ -26,6 +26,7 @@ const VideosPage: NextPage = () => {
         channelId: filters.channel,
         tags: filters.tags,
         orderBy: filters.orderBy,
+        query: filters.query,
       },
     ],
     {
@@ -49,6 +50,10 @@ const VideosPage: NextPage = () => {
     }
     if (values.tags?.length !== undefined && values.tags.length === 0) {
       newValue.tags = undefined;
+    }
+
+    if (values.query?.length !== undefined && values.query.length === 0) {
+      newValue.query = undefined;
     }
     setFilters(newValue);
   };

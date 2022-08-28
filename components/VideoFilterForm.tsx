@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import RaisedBlockButton from "./common/RaisedBlockButton";
 import { VideoForm } from "../lib/types";
 import { trpc } from "../lib/utils/trpc";
+import BaseTextInput from "./common/BaseTextInput";
 
 const Form = styled.form`
   display: flex;
@@ -74,6 +75,16 @@ const VideoFilterForm = ({ channels, submitHandler }: VideoFilterFormProps) => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      <BaseTextInput
+        style={{
+          width: "200px",
+          margin: "0",
+          boxShadow: "none",
+          borderWidth: "2px",
+        }}
+        {...register("query", { required: false })}
+        placeholder="Search"
+      />
       <Field>
         <label htmlFor="channel">Channel</label>
         <select {...register("channel", { minLength: 1, required: false })}>
