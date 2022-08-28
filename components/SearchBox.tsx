@@ -1,4 +1,11 @@
-import { ChangeEvent, useMemo, useState, useEffect } from "react";
+import {
+  ChangeEvent,
+  FocusEvent,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import styled, { keyframes } from "styled-components";
 import debounce from "lodash/debounce";
 import { CommonStyle } from "../lib/types/CommonStyle";
@@ -63,6 +70,11 @@ const ResultBox = styled.div`
   li {
     list-style: none;
     padding: 5px;
+
+    &:hover {
+      cursor: pointer;
+      background: ${(props) => props.theme.color.grey[200]};
+    }
   }
 `;
 
@@ -73,6 +85,7 @@ type SearchBoxProps = {
   loading?: boolean;
   results?: { value: string; label: string }[];
   onSearch(value: string): void;
+  onSelect(value: string): void;
 };
 
 export const SearchBox = ({
@@ -82,7 +95,9 @@ export const SearchBox = ({
   loading,
   results,
   onSearch,
+  onSelect,
 }: SearchBoxProps) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [focused, setFocused] = useState(false);
   const onSearchHandler = useMemo(
@@ -102,7 +117,7 @@ export const SearchBox = ({
   };
 
   return (
-    <OuterContainer {...commonStyle}>
+    <OuterContainer {...commonStyle} ref={containerRef}>
       <Input
         type="search"
         placeholder={placeholder ?? "Search"}
@@ -116,7 +131,9 @@ export const SearchBox = ({
           {results && !loading ? (
             <ul>
               {results.map((res) => (
-                <li key={res.value}>{res.label}</li>
+                <li key={res.value} onClick={() => onSelect(res.value)}>
+                  {res.label}
+                </li>
               ))}
             </ul>
           ) : (

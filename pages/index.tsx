@@ -59,6 +59,11 @@ const Home: NextPage = () => {
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
+
+  const handleSelect = (value: string) => {
+    console.log(value, "clicked");
+  };
+
   const latest = trpc.useQuery(["videos.find", { size: 20 }], {
     staleTime: 60,
   });
@@ -91,6 +96,7 @@ const Home: NextPage = () => {
         commonStyle={{ margin: "30px 0px" }}
         placeholder="Search by videos by title or channel"
         onSearch={handleSearch}
+        onSelect={handleSelect}
         results={searchResults}
         delay={300}
         loading={isLoading}
