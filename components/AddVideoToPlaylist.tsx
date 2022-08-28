@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { trpc } from "../lib/utils/trpc";
-import { useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
+import RaisedBlockButton from "./common/RaisedBlockButton";
+import BaseTextInput from "./common/BaseTextInput";
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +51,12 @@ const Label = styled.span`
   text-align: start;
 `;
 
+const Form = styled.form`
+  display: flex;
+  gap: 10px;
+  padding: 10px 5px;
+`;
+
 const AddVideoToPlaylist = ({
   videoId,
   playlistsIncluded,
@@ -56,6 +64,7 @@ const AddVideoToPlaylist = ({
   videoId: string;
   playlistsIncluded: { videoId: string; playlistId: string }[];
 }) => {
+  const [newName, setNewName] = useState("");
   const [searchable, setSearchable] = useState(playlistsIncluded);
   const utils = trpc.useContext();
   const playlists = trpc.useQuery(["playlists.find", { size: 1000 }], {
@@ -82,6 +91,11 @@ const AddVideoToPlaylist = ({
       );
     },
   });
+  const create = trpc.useMutation(["playlists.create"], {
+    onSuccess: () => {
+      utils.invalidateQueries(["playlists.find"]);
+    },
+  });
 
   const handleAdd = async (playlistId: string) => {
     await add.mutateAsync({ videoId, playlistId });
@@ -89,6 +103,13 @@ const AddVideoToPlaylist = ({
 
   const handleRemove = async (playlistId: string) => {
     await remove.mutateAsync({ videoId, playlistId });
+  };
+
+  const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (newName.length > 0) {
+      await create.mutateAsync({ name: newName });
+    }
   };
 
   const inPlaylists = useMemo(() => {
@@ -100,6 +121,20 @@ const AddVideoToPlaylist = ({
       {playlists.data && playlists.data.playlists.length === 0 && (
         <div>No Existing Playlists</div>
       )}
+      <Form onSubmit={handleCreate}>
+        <BaseTextInput
+          type="text"
+          placeholder="New Playlist"
+          value={newName}
+          onChange={(e) => setNewName(e.currentTarget.value)}
+        />
+        <RaisedBlockButton
+          style={{ padding: "10px", height: "fit-content" }}
+          type="submit"
+        >
+          Submit
+        </RaisedBlockButton>
+      </Form>
       {playlists.data &&
         playlists.data.playlists.map((pl) => {
           return (
