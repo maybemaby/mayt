@@ -5,6 +5,7 @@ import ModalProvider from "../components/ModalProvider";
 import { WithSidebar } from "../components/layouts/WithSidebar";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "./api/trpc/[trpc]";
+import "../base.css";
 
 const GlobalStyle = createGlobalStyle`
 html,
