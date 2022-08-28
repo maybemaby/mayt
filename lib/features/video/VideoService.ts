@@ -123,6 +123,29 @@ async function findVideos(options: FindVideoOptions) {
   });
 }
 
+async function searchVideos(query: string) {
+  return await db.video.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        {
+          channel: {
+            name: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        },
+      ],
+    },
+  });
+}
+
 async function getPinned(size: number) {
   return await db.video.findMany({
     where: {
@@ -217,6 +240,7 @@ const VideoService = {
   getPinned,
   togglePinned,
   getOne,
+  searchVideos,
 };
 
 export default VideoService;

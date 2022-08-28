@@ -263,4 +263,9 @@ describe("VideoService", () => {
 
     expect(res.pinned).toBeFalsy();
   });
+
+  test("Should find by channel or name", async () => {
+    const res = await VideoService.searchVideos("Seed");
+    expect(res.length).toBe(3);
+  });
 });

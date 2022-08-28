@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 import { TbPinned, TbTrendingUp } from "react-icons/tb";
 import { SearchBox } from "../components/SearchBox";
@@ -38,17 +38,26 @@ const StyledIconHeader = styled(IconHeader)`
 `;
 
 const Home: NextPage = () => {
-  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const { isLoading, data } = trpc.useQuery(
+    ["videos.search", { q: searchValue }],
+    {
+      enabled: searchValue.length > 0,
+    }
+  );
+  const searchResults = useMemo(() => {
+    if (data) {
+      return data.map((video) => ({ label: video.name, value: video.id }));
+    }
+    return [];
+  }, [data]);
   const {
     videoPlaylist: { videoId, includedPlaylists },
     tagModal,
   } = useModal();
 
   const handleSearch = (value: string) => {
-    setSearchLoading(true);
-    setTimeout(() => {
-      setSearchLoading(false);
-    }, 300);
+    setSearchValue(value);
   };
   const latest = trpc.useQuery(["videos.find", { size: 20 }], {
     staleTime: 60,
@@ -82,12 +91,9 @@ const Home: NextPage = () => {
         commonStyle={{ margin: "30px 0px" }}
         placeholder="Search by videos by title or channel"
         onSearch={handleSearch}
-        results={[
-          { label: "Found 1", value: "value 1" },
-          { label: "Found 2", value: "value 2" },
-        ]}
+        results={searchResults}
         delay={300}
-        loading={searchLoading}
+        loading={isLoading}
       />
       <PinnedContent>
         <StyledIconHeader Icon={TbPinned} iconProps={{ size: 25 }}>

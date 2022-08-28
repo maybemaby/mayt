@@ -64,6 +64,14 @@ export const videoRouter = trpc
       return await VideoService.getOne(input);
     },
   })
+  .query("search", {
+    input: z.object({
+      q: z.string().min(1),
+    }),
+    async resolve({ input }) {
+      return await VideoService.searchVideos(input.q);
+    },
+  })
   .mutation("addTag", {
     input: z.object({
       videoId: z.string(),

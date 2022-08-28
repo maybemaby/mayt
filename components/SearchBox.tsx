@@ -122,6 +122,9 @@ export const SearchBox = ({
           ) : (
             "Searching..."
           )}
+          {results && results.length === 0 && focused && (
+            <div>No results found</div>
+          )}
         </ResultBox>
       )}
     </OuterContainer>
