@@ -6,6 +6,7 @@ export const useModal = () => {
 
   const open = () => {
     if (modalState.setOpen !== null) {
+      document.body.style.overflow = "hidden";
       modalState.setOpen(true);
     }
   };
@@ -13,6 +14,7 @@ export const useModal = () => {
   const close = useCallback(() => {
     if (modalState.setOpen !== null) {
       modalState.setOpen(false);
+      document.body.style.overflow = "scroll";
     }
     if (modalState.videoPlaylist.setVideoId) {
       modalState.videoPlaylist.setVideoId(null);

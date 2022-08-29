@@ -86,9 +86,3 @@ const PlayerPage: NextPage = () => {
 };
 
 export default PlayerPage;
-
-export const getStaticProps: GetStaticProps = (context) => {
-  return {
-    props: {},
-  };
-};

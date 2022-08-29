@@ -16,8 +16,11 @@ body {
   margin: 0;
   font-family: 'Poppins', Fira Sans ,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Droid Sans, Helvetica Neue, sans-serif;
-  overflow-y: auto;
   max-width: 100vw;
+}
+
+body {
+  overflow-y: auto;
 }
 
 h1 {

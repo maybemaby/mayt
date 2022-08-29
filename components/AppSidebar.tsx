@@ -2,8 +2,8 @@ import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 import { BaseSidebar } from "./common/BaseSidebar";
-import { BsPlayFill, BsPlusLg, BsFillGearFill } from "react-icons/bs";
-import { MdOutlinePlaylistPlay } from "react-icons/md";
+import { BsPlayFill, BsPlusLg } from "react-icons/bs";
+import { MdOutlinePlaylistPlay, MdPersonalVideo } from "react-icons/md";
 
 const SidebarList = styled.ul`
   list-style: none;
@@ -120,7 +120,7 @@ export const AppSidebar = ({
       <SidebarBottom>
         <Link href="/player">
           <a>
-            <BsFillGearFill size={25} style={{ marginLeft: "6px" }} />
+            <MdPersonalVideo size={25} style={{ marginLeft: "6px" }} />
             Player
           </a>
         </Link>
