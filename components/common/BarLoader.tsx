@@ -6,8 +6,8 @@ type LoaderProps = {
   color?: string;
 };
 
-const LoaderAnimation = keyframes`
-  0%   { height: 48px}
+const LoaderAnimation = (height?: string) => keyframes`
+  0%   { height: ${height ?? "48px"}}
   100% { height: 4px}
 `;
 
@@ -21,7 +21,8 @@ const Loader = styled.span<LoaderProps>`
   background: currentColor;
   color: ${(props) => props.color ?? props.theme.color.primary[100]};
   box-sizing: border-box;
-  animation: ${LoaderAnimation} 0.3s 0.3s linear infinite alternate;
+  animation: ${(props) => LoaderAnimation(props.height)} 0.3s 0.3s linear
+    infinite alternate;
 
   &::after,
   &::before {
@@ -35,7 +36,8 @@ const Loader = styled.span<LoaderProps>`
     transform: translateY(-50%);
     left: 20px;
     box-sizing: border-box;
-    animation: ${LoaderAnimation} 0.3s 0.45s linear infinite alternate;
+    animation: ${(props) => LoaderAnimation(props.height)} 0.3s 0.45s linear
+      infinite alternate;
   }
 
   &::before {

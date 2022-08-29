@@ -4,6 +4,7 @@ import Head from "next/head";
 import YouTubePlayer, { YouTubeProps } from "react-youtube";
 import { usePlayer } from "../../hooks/usePlayer";
 import Playlist from "../../components/Playlist";
+import type { Playable } from "../../lib/types/Playable";
 
 const StyledPlayer = styled(YouTubePlayer)`
   width: 100%;
@@ -35,14 +36,29 @@ const PlayerContainer = styled.div`
 
 const Controls = styled.section`
   width: min(500px, 100%);
-  max-height: 1000px;
   margin: 50px auto;
-  overflow-y: auto;
+
+  @media screen and (min-width: 1024px) {
+    width: 900px;
+  } ;
 `;
 
 const PlayerPage: NextPage = () => {
   const player = usePlayer();
   const playerOpts: YouTubeProps["opts"] = {};
+
+  const handleSelect = (video: Playable, idx: number) => {
+    player.moveTo(video.id);
+  };
+
+  const handleNext = () => {
+    player.next();
+  };
+
+  const handlePrev = () => {
+    player.prev();
+  };
+
   return (
     <Page>
       <Head>
@@ -57,9 +73,13 @@ const PlayerPage: NextPage = () => {
         />
       </PlayerContainer>
       <Controls id="controls">
-        <button onClick={() => player.prev()}>Previous</button>
-        <button onClick={() => player.next()}>Next</button>
-        <Playlist videos={player.watchList} />
+        <Playlist
+          videos={player.watchList}
+          onSelect={handleSelect}
+          onNext={handleNext}
+          onPrev={handlePrev}
+          nowPlaying={player.current}
+        />
       </Controls>
     </Page>
   );
