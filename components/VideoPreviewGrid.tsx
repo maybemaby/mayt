@@ -40,6 +40,7 @@ function VideoPreviewGrid<T extends Unpacked<VideoFindReturn["videos"]>>({
                 ref={ref}
                 key={video.id}
                 id={video.id}
+                ytId={video.ytId}
                 channel={video.channel?.name ?? "No Channel"}
                 pinned={video.pinned ?? false}
                 title={video.name}
@@ -54,6 +55,7 @@ function VideoPreviewGrid<T extends Unpacked<VideoFindReturn["videos"]>>({
             <SmallVideoPreview
               key={video.id}
               id={video.id}
+              ytId={video.ytId}
               channel={video.channel?.name ?? "No Channel"}
               pinned={video.pinned ?? false}
               title={video.name}

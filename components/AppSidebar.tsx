@@ -118,10 +118,10 @@ export const AppSidebar = ({
         </SidebarItem>
       </SidebarList>
       <SidebarBottom>
-        <Link href="/settings">
+        <Link href="/player">
           <a>
             <BsFillGearFill size={25} style={{ marginLeft: "6px" }} />
-            Settings
+            Player
           </a>
         </Link>
       </SidebarBottom>

@@ -1,7 +1,9 @@
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { lightTheme } from "../theme";
 import ModalProvider from "../components/ModalProvider";
+import PlayerProvider from "../components/PlayerProvider";
 import { WithSidebar } from "../components/layouts/WithSidebar";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "./api/trpc/[trpc]";
@@ -46,13 +48,18 @@ div#__next {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Head>
+        <title>Mayt</title>
+      </Head>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyle />
-        <ModalProvider>
-          <WithSidebar>
-            <Component {...pageProps} />
-          </WithSidebar>
-        </ModalProvider>
+        <PlayerProvider>
+          <ModalProvider>
+            <WithSidebar>
+              <Component {...pageProps} />
+            </WithSidebar>
+          </ModalProvider>
+        </PlayerProvider>
       </ThemeProvider>
     </>
   );

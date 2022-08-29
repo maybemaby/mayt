@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import type { VideoFindReturn, VideoLike } from "../lib/types";
+import type { VideoFindReturn } from "../lib/types";
 import type { CommonStyle } from "../lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
 import BarLoader from "./common/BarLoader";
 import { Unpacked } from "../lib/types/Unpacked";
 
 const Section = styled.section<CommonStyle>`
-  margin: 20px auto;
   padding: ${(props) => props.padding};
-  margin: ${(props) => props.margin};
+  margin: ${(props) => props.margin ?? "20px auto"};
   border-radius: ${(props) => props.borderRadius};
   width: 80%;
 
@@ -67,6 +66,7 @@ function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
           <SmallVideoPreview
             key={video.id}
             id={video.id}
+            ytId={video.ytId}
             channel={video.channel?.name ?? "No Channel"}
             channelId={video.channel?.id}
             thumbnail_url={video.thumbnail_url ?? ""}

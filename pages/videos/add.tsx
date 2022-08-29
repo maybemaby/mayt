@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { ChangeEvent, FormEventHandler, useState } from "react";
 import styled from "styled-components";
 import { trpc } from "../../lib/utils/trpc";
@@ -18,7 +18,7 @@ const ReplySection = styled.section`
   display: flex;
   flex-direction: row;
   width: 90%;
-  margin: 0px auto;
+  margin: 0 auto;
   gap: 20px;
   align-items: center;
 
@@ -144,3 +144,9 @@ const AddVideoPage: NextPage = () => {
 };
 
 export default AddVideoPage;
+
+export const getStaticProps: GetStaticProps = (context) => {
+  return {
+    props: {},
+  };
+};

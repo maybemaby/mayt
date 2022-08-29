@@ -6,6 +6,7 @@ import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
 import Menu from "./Menu";
 import { useModal } from "../hooks/useModal";
+import { usePlayer } from "../hooks/usePlayer";
 
 type VideoPreviewProps = {
   thumbnail_url: string;
@@ -32,13 +33,17 @@ const ImageContainer = styled.div`
   }
 `;
 
-const SmallImageContainer = styled.div`
+const SmallImageContainer = styled.a`
   box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.427);
   position: relative;
   margin-bottom: 20px;
   border-radius: 10px;
   width: 240px;
   aspect-ratio: 4/3;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Container = styled.div`
@@ -140,14 +145,17 @@ export const SmallVideoPreview = React.forwardRef(
       pinned,
       playlists,
       tags,
+      ytId,
     }: VideoPreviewProps & {
       id: string;
+      ytId: string;
       pinned: boolean;
       playlists: { videoId: string; playlistId: string }[];
       tags: { videoId: string; tagId: string }[];
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
+    const player = usePlayer();
     const utils = trpc.useContext();
     const clear = trpc.useMutation("videos.delete", {
       onSuccess(input) {
@@ -218,15 +226,34 @@ export const SmallVideoPreview = React.forwardRef(
 
     return (
       <SmallContainer ref={ref}>
-        <SmallImageContainer>
-          <StyledImage
-            src={thumbnail_url}
-            alt={title}
-            priority
-            layout="fill"
-            objectFit="contain"
-          />
-        </SmallImageContainer>
+        <Link href={"/player"}>
+          <SmallImageContainer
+            onClick={() =>
+              player.appendVideos([
+                {
+                  ytId,
+                  id,
+                  thumbnail_url,
+                  title,
+                  channel,
+                  channelId,
+                  pinned,
+                  playlists,
+                  tags,
+                },
+              ])
+            }
+          >
+            <StyledImage
+              src={thumbnail_url}
+              alt={title}
+              priority
+              layout="fill"
+              objectFit="contain"
+            />
+          </SmallImageContainer>
+        </Link>
+
         <SmallInfo>
           <SmallTitle title={title}>{title}</SmallTitle>
           <BaseRow width={"100%"} justify={"space-between"}>
