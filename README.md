@@ -2,7 +2,7 @@
 ---
 
 Todo:
-- Create a playlist from modal
-- Track most watched
-- Add search functionality
-- 
+- [x] Create a playlist from modal
+- [ ] Track most watched
+- [ ] Add search functionality
+- [ ] Embedded video player
