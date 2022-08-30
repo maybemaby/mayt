@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import type { SmallVideoPreview } from "./VideoPreview";
 
 export type Watchable = Parameters<typeof SmallVideoPreview>[0];
@@ -28,6 +28,17 @@ export const PlayerContext = createContext<PlayerStore>({
 const PlayerProvider = ({ children }: PlayerProviderProps) => {
   const [watching, setWatching] = useState<Watchable[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("mayt_player");
+    if (saved) {
+      setWatching(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("mayt_player", JSON.stringify(watching));
+  }, [watching]);
 
   return (
     <PlayerContext.Provider
