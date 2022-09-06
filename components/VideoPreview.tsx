@@ -6,7 +6,7 @@ import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
 import Menu from "./Menu";
 import { useModal } from "../hooks/useModal";
-import { usePlayer } from "../hooks/usePlayer";
+import { usePlayerStore } from "stores/PlayerStore";
 
 type VideoPreviewProps = {
   thumbnail_url: string | null;
@@ -157,7 +157,7 @@ export const SmallVideoPreview = React.forwardRef(
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
-    const player = usePlayer();
+    const store = usePlayerStore();
     const utils = trpc.useContext();
     const clear = trpc.useMutation("videos.delete", {
       onSuccess(input) {
@@ -231,19 +231,13 @@ export const SmallVideoPreview = React.forwardRef(
         <Link href={"/player"}>
           <SmallImageContainer
             onClick={() =>
-              player.appendVideos([
-                {
-                  ytId,
-                  id,
-                  thumbnail_url,
-                  name,
-                  channel,
-                  channelId,
-                  pinned,
-                  playlists,
-                  tags,
-                },
-              ])
+              store.addNext({
+                ytId,
+                id,
+                name,
+                channel,
+                channelId,
+              })
             }
           >
             {thumbnail_url && (

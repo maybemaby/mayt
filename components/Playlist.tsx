@@ -92,7 +92,7 @@ interface PlaylistProps<T extends Playable> {
   videos: T[];
   onNext(): void;
   onPrev(): void;
-  onSelect(video: T, idx: number): void;
+  onSelect(select: { video: T; idx: number }): void;
   nowPlaying?: T;
 }
 
@@ -121,7 +121,7 @@ function Playlist<T extends Playable>({
           <PlaylistItem
             key={video.id}
             tabIndex={0}
-            onClick={() => onSelect(video, idx)}
+            onClick={() => onSelect({ video, idx })}
             playing={nowPlaying.id === video.id}
           >
             {nowPlaying.id === video.id && (

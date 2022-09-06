@@ -24,8 +24,8 @@ const PlayerPage: NextPage = () => {
   }, [store.nowPlaying, store.upNext]);
   const playerOpts: YouTubeProps["opts"] = {};
 
-  const handleSelect = (video: Playable, idx: number) => {
-    store.movePlayer({ action: "moveTo", videoId: video.id });
+  const handleSelect = (select: { video: Playable; idx: number }) => {
+    store.movePlayer({ action: "moveTo", videoId: select.video.id });
   };
 
   const handleNext = () => {

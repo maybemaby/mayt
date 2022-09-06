@@ -74,7 +74,7 @@ const Player = ({ onEnd, opts }: PlayerProps) => {
 interface ControlsProps {
   handleNext(): void;
   handlePrev(): void;
-  handleSelect(video: Playable, idx: number): void;
+  handleSelect(select: {video: Playable, idx: number}): void;
 }
 
 const Controls = ({ handleNext, handlePrev, handleSelect }: ControlsProps) => {

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, useMemo, useState } from "react";
+import React, { ForwardedRef } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import BaseRow from "./common/BaseRow";
@@ -6,7 +6,7 @@ import Menu from "./Menu";
 import { trpc } from "../lib/utils/trpc";
 import type { PlaylistLike } from "../lib/types";
 import Link from "next/link";
-import { usePlayer } from "../hooks/usePlayer";
+import { usePlayerStore } from "stores/PlayerStore";
 
 const Container = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ const PlaylistPreview = React.forwardRef(function PlaylistPreview(
   { playlist }: PlaylistPreviewProps,
   ref: ForwardedRef<HTMLDivElement>
 ) {
-  const player = usePlayer();
+  const store = usePlayerStore();
   const utils = trpc.useContext();
   const deletePlaylist = trpc.useMutation(["playlists.deleteOne"], {
     onSuccess() {
@@ -89,8 +89,8 @@ const PlaylistPreview = React.forwardRef(function PlaylistPreview(
 
   return (
     <Container ref={ref}>
-      <Link href={"/player"}>
-        <SmallImageContainer onClick={() => player.loadPlaylist(playlist.id)}>
+      <Link href={`/playlists/${playlist.id}`}>
+        <SmallImageContainer>
           {playlist.videoPlaylist.length > 0 ? (
             <StyledImage
               src={playlist.videoPlaylist[0].video.thumbnail_url ?? ""}
