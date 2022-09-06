@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { AiOutlineClose } from "react-icons/ai";
-import { useModal } from "../hooks/useModal";
-import useOnClickOutside from "../hooks/useOnClickOutside";
+import { useModal } from "@hooks/useModal";
+import useOnClickOutside from "@hooks/useOnClickOutside";
 import popIn from "./animations/PopIn";
 import { IconButton } from "./common/IconButton";
 

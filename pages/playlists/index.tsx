@@ -2,12 +2,12 @@ import { NextPage } from "next";
 import { FormEvent, useMemo, useState } from "react";
 import styled from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useModal } from "../../hooks/useModal";
-import BarLoader from "../../components/common/BarLoader";
-import { IconButton } from "../../components/common/IconButton";
-import PlaylistPreviewGrid from "../../components/PlaylistPreviewGrid";
-import { trpc } from "../../lib/utils/trpc";
-import Modal from "../../components/Modal";
+import { useModal } from "@hooks/useModal";
+import BarLoader from "@components/common/BarLoader";
+import { IconButton } from "@components/common/IconButton";
+import PlaylistPreviewGrid from "@components/PlaylistPreviewGrid";
+import { trpc } from "@lib/utils/trpc";
+import Modal from "@components/Modal";
 
 const Page = styled.section`
   margin: 30px;

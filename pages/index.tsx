@@ -3,15 +3,15 @@ import Head from "next/head";
 import { useMemo, useState } from "react";
 import styled from "styled-components";
 import { TbPinned, TbTrendingUp } from "react-icons/tb";
-import { SearchBox } from "../components/SearchBox";
-import IconHeader from "../components/common/IconHeader";
-import VideoPreviewRow from "../components/VideoPreviewRow";
-import { trpc } from "../lib/utils/trpc";
-import BarLoader from "../components/common/BarLoader";
-import { useModal } from "../hooks/useModal";
-import Modal from "../components/Modal";
-import AddVideoToPlaylist from "../components/AddVideoToPlaylist";
-import UpdateTagsModal from "../components/UpdateTagsModal";
+import { SearchBox } from "@components/SearchBox";
+import IconHeader from "@components/common/IconHeader";
+import VideoPreviewRow from "@components/VideoPreviewRow";
+import { trpc } from "@lib/utils/trpc";
+import BarLoader from "@components/common/BarLoader";
+import { useModal } from "@hooks/useModal";
+import Modal from "@components/Modal";
+import AddVideoToPlaylist from "@components/AddVideoToPlaylist";
+import UpdateTagsModal from "@components/UpdateTagsModal";
 
 const PinnedContent = styled.div`
   width: 100%;

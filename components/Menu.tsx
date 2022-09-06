@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { usePopper } from "react-popper";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IconButton } from "./common/IconButton";
-import useOnClickOutside from "../hooks/useOnClickOutside";
+import useOnClickOutside from "@hooks/useOnClickOutside";
 import PopIn from "./animations/PopIn";
 
 type MenuProps = {
