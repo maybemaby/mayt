@@ -93,7 +93,7 @@ interface PlaylistProps<T extends Playable> {
   onNext(): void;
   onPrev(): void;
   onSelect(video: T, idx: number): void;
-  nowPlaying: T;
+  nowPlaying?: T;
 }
 
 function Playlist<T extends Playable>({
@@ -113,27 +113,28 @@ function Playlist<T extends Playable>({
           <BsFillSkipForwardFill size={20} />
         </IconButton>
         <span style={{ fontWeight: "600" }}>
-          Now Playing - {nowPlaying.name}
+          Now Playing - {nowPlaying?.name}
         </span>
       </PlaylistHeader>
-      {videos.map((video, idx) => (
-        <PlaylistItem
-          key={video.id}
-          tabIndex={0}
-          onClick={() => onSelect(video, idx)}
-          playing={nowPlaying.id === video.id}
-        >
-          {nowPlaying.id === video.id && (
-            <BsPlayFill size={30} color={"#4F75AE"} />
-          )}
-          <ItemInfo>
-            <strong>{video.name}</strong>
-            <Link href={`/channels/${video.channelId}`}>
-              <a>{video.channel}</a>
-            </Link>
-          </ItemInfo>
-        </PlaylistItem>
-      ))}
+      {nowPlaying &&
+        videos.map((video, idx) => (
+          <PlaylistItem
+            key={video.id}
+            tabIndex={0}
+            onClick={() => onSelect(video, idx)}
+            playing={nowPlaying.id === video.id}
+          >
+            {nowPlaying.id === video.id && (
+              <BsPlayFill size={30} color={"#4F75AE"} />
+            )}
+            <ItemInfo>
+              <strong>{video.name}</strong>
+              <Link href={`/channels/${video.channelId}`}>
+                <a>{video.channel}</a>
+              </Link>
+            </ItemInfo>
+          </PlaylistItem>
+        ))}
     </Container>
   );
 }
