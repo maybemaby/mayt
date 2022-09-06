@@ -4,9 +4,14 @@ import Link from "next/link";
 import styled from "styled-components";
 import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
-import Menu from "./Menu";
 import { useModal } from "../hooks/useModal";
 import { usePlayerStore } from "stores/PlayerStore";
+import dynamic from "next/dynamic";
+
+const DynamicMenu = dynamic(() => import("../components/Menu"), {
+  ssr: false,
+  loading: () => <div></div>,
+});
 
 type VideoPreviewProps = {
   thumbnail_url: string | null;
@@ -260,7 +265,7 @@ export const SmallVideoPreview = React.forwardRef(
                 <Subtitle>{channel}</Subtitle>
               </a>
             </Link>
-            <Menu options={options} onSelect={handleSelect} />
+            <DynamicMenu options={options} onSelect={handleSelect} />
           </BaseRow>
         </SmallInfo>
       </SmallContainer>

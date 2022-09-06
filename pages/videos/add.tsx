@@ -122,7 +122,7 @@ const AddVideoPage: NextPage = () => {
         <>
           <VideoPreview
             thumbnail_url={resultFound.thumbnail_url}
-            title={resultFound.title}
+            name={resultFound.title}
             channel={resultFound.author_name}
           />
           <ReplySection id="replies">

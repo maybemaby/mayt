@@ -1,12 +1,17 @@
+import dynamic from "next/dynamic";
 import React, { ForwardedRef } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import BaseRow from "./common/BaseRow";
-import Menu from "./Menu";
 import { trpc } from "../lib/utils/trpc";
 import type { PlaylistLike } from "../lib/types";
 import Link from "next/link";
 import { usePlayerStore } from "stores/PlayerStore";
+
+const DynamicMenu = dynamic(() => import("../components/Menu"), {
+  ssr: false,
+  loading: () => <div></div>,
+});
 
 const Container = styled.div`
   display: flex;
@@ -107,7 +112,7 @@ const PlaylistPreview = React.forwardRef(function PlaylistPreview(
         <Title title={playlist.name}>{playlist.name}</Title>
         <BaseRow width={"100%"} justify={"space-between"}>
           <span>{playlist._count.videoPlaylist} Videos</span>
-          <Menu options={options} onSelect={handleMenuSelect} />
+          <DynamicMenu options={options} onSelect={handleMenuSelect} />
         </BaseRow>
       </Description>
     </Container>
