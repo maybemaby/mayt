@@ -9,8 +9,8 @@ import { useModal } from "../hooks/useModal";
 import { usePlayer } from "../hooks/usePlayer";
 
 type VideoPreviewProps = {
-  thumbnail_url: string;
-  title: string;
+  thumbnail_url: string | null;
+  name: string;
   channel: string;
   channelId?: string;
 };
@@ -113,20 +113,22 @@ const Subtitle = styled.p`
   margin: 0;
 `;
 
-const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
+const VideoPreview = ({ thumbnail_url, name, channel }: VideoPreviewProps) => {
   return (
     <Container>
       <ImageContainer>
-        <StyledImage
-          src={thumbnail_url}
-          alt={title}
-          priority
-          layout="fill"
-          objectFit="contain"
-        />
+        {thumbnail_url && (
+          <StyledImage
+            src={thumbnail_url}
+            alt={name}
+            priority
+            layout="fill"
+            objectFit="contain"
+          />
+        )}
       </ImageContainer>
       <Info>
-        <Title>{title}</Title>
+        <Title>{name}</Title>
         <Subtitle>{channel}</Subtitle>
       </Info>
     </Container>
@@ -139,7 +141,7 @@ export const SmallVideoPreview = React.forwardRef(
     {
       id,
       thumbnail_url,
-      title,
+      name,
       channel,
       channelId,
       pinned,
@@ -234,7 +236,7 @@ export const SmallVideoPreview = React.forwardRef(
                   ytId,
                   id,
                   thumbnail_url,
-                  title,
+                  name,
                   channel,
                   channelId,
                   pinned,
@@ -244,18 +246,20 @@ export const SmallVideoPreview = React.forwardRef(
               ])
             }
           >
-            <StyledImage
-              src={thumbnail_url}
-              alt={title}
-              priority
-              layout="fill"
-              objectFit="contain"
-            />
+            {thumbnail_url && (
+              <StyledImage
+                src={thumbnail_url}
+                alt={name}
+                priority
+                layout="fill"
+                objectFit="contain"
+              />
+            )}
           </SmallImageContainer>
         </Link>
 
         <SmallInfo>
-          <SmallTitle title={title}>{title}</SmallTitle>
+          <SmallTitle title={name}>{name}</SmallTitle>
           <BaseRow width={"100%"} justify={"space-between"}>
             <Link href={`/channels/${channelId}`}>
               <a>

@@ -43,7 +43,7 @@ function VideoPreviewGrid<T extends Unpacked<VideoFindReturn["videos"]>>({
                 ytId={video.ytId}
                 channel={video.channel?.name ?? "No Channel"}
                 pinned={video.pinned ?? false}
-                title={video.name}
+                name={video.name}
                 thumbnail_url={video.thumbnail_url ?? ""}
                 channelId={video.channel?.id}
                 playlists={video.videoPlaylist}
@@ -58,7 +58,7 @@ function VideoPreviewGrid<T extends Unpacked<VideoFindReturn["videos"]>>({
               ytId={video.ytId}
               channel={video.channel?.name ?? "No Channel"}
               pinned={video.pinned ?? false}
-              title={video.name}
+              name={video.name}
               thumbnail_url={video.thumbnail_url ?? ""}
               channelId={video.channel?.id}
               playlists={video.videoPlaylist}

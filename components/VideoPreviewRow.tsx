@@ -70,7 +70,7 @@ function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
             channel={video.channel?.name ?? "No Channel"}
             channelId={video.channel?.id}
             thumbnail_url={video.thumbnail_url ?? ""}
-            title={video.name}
+            name={video.name}
             pinned={video.pinned ?? false}
             playlists={video.videoPlaylist}
             tags={video.VideoTag}

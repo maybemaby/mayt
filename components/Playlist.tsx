@@ -113,7 +113,7 @@ function Playlist<T extends Playable>({
           <BsFillSkipForwardFill size={20} />
         </IconButton>
         <span style={{ fontWeight: "600" }}>
-          Now Playing - {nowPlaying.title}
+          Now Playing - {nowPlaying.name}
         </span>
       </PlaylistHeader>
       {videos.map((video, idx) => (
@@ -127,7 +127,7 @@ function Playlist<T extends Playable>({
             <BsPlayFill size={30} color={"#4F75AE"} />
           )}
           <ItemInfo>
-            <strong>{video.title}</strong>
+            <strong>{video.name}</strong>
             <Link href={`/channels/${video.channelId}`}>
               <a>{video.channel}</a>
             </Link>

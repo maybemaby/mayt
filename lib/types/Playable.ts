@@ -1,7 +1,7 @@
 export interface Playable {
   id: string;
   ytId: string;
-  title: string;
+  name: string;
   channel: string;
   channelId?: string;
 }
