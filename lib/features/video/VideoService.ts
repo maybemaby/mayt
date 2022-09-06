@@ -4,6 +4,7 @@ import FindOptions from "../../types/FindOptions";
 
 type FindVideoOptions = FindOptions & {
   channelId?: string;
+  playlistId?: string;
   orderBy?: {
     direction: "desc" | "asc";
     prop: "name" | "addedAt";
@@ -65,6 +66,17 @@ async function findVideos(options: FindVideoOptions) {
       },
     },
   };
+
+  if (options.playlistId) {
+    params.where = {
+      ...params.where,
+      videoPlaylist: {
+        some: {
+          playlistId: options.playlistId,
+        },
+      },
+    };
+  }
 
   // Coerce options into correct orderBy, or sort by most recent video by default.
   switch (options.orderBy?.prop) {

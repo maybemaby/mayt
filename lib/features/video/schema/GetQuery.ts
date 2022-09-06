@@ -12,6 +12,7 @@ export const getQuerySchema = z.object({
     .or(z.string().transform((val) => parseInt(val)))
     .optional(),
   channelId: z.string().optional(),
+  playlistId: z.string().optional(),
   tags: z
     .string()
     .array()
