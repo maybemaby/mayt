@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { toast } from "react-hot-toast";
 import { trpc } from "../lib/utils/trpc";
 import { FormEvent, useMemo, useState } from "react";
 import RaisedBlockButton from "./common/RaisedBlockButton";
 import BaseTextInput from "./common/BaseTextInput";
+import BarLoader from "./common/BarLoader";
 
 const Container = styled.div`
   display: flex;
@@ -72,6 +74,7 @@ const AddVideoToPlaylist = ({
   });
   const add = trpc.useMutation(["playlists.addVideo"], {
     onSuccess(input) {
+      toast.success(`Added to playlist!`);
       utils.invalidateQueries(["videos.getPinned"]);
       utils.invalidateQueries(["videos.find"]);
       utils.invalidateQueries(["videos.getOne", input.videoId]);
@@ -83,6 +86,7 @@ const AddVideoToPlaylist = ({
   });
   const remove = trpc.useMutation(["playlists.removeVideo"], {
     onSuccess(input) {
+      toast.success("Removed from playlist!");
       utils.invalidateQueries(["videos.getPinned"]);
       utils.invalidateQueries(["videos.find"]);
       utils.invalidateQueries(["videos.getOne", input.videoId]);
@@ -140,12 +144,20 @@ const AddVideoToPlaylist = ({
           return (
             <>
               {inPlaylists.includes(pl.id) ? (
-                <SelectButton key={pl.id} onClick={() => handleRemove(pl.id)}>
+                <SelectButton
+                  key={pl.id}
+                  onClick={() => handleRemove(pl.id)}
+                  disabled={remove.isLoading}
+                >
                   <AiOutlineMinus size={20} />
                   <Label>{pl.name}</Label>
                 </SelectButton>
               ) : (
-                <SelectButton key={pl.id} onClick={() => handleAdd(pl.id)}>
+                <SelectButton
+                  key={pl.id}
+                  onClick={() => handleAdd(pl.id)}
+                  disabled={add.isLoading}
+                >
                   <AiOutlinePlus size={20} />
                   <Label>{pl.name}</Label>
                 </SelectButton>
@@ -153,8 +165,7 @@ const AddVideoToPlaylist = ({
             </>
           );
         })}
-      {add.isSuccess && <div style={{ color: "#3da859" }}>Added!</div>}
-      {remove.isSuccess && <div style={{ color: "#3da859" }}>Removed!</div>}
+      {!playlists.data && <BarLoader />}
       {remove.isError && <div style={{ color: "red" }}>Failed to remove.</div>}
       {add.isError && add.error.message.includes("duplicate") && (
         <div style={{ color: "red" }}>Already in playlist</div>
