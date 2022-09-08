@@ -6,7 +6,7 @@ import BaseRow from "./common/BaseRow";
 import { trpc } from "../lib/utils/trpc";
 import type { PlaylistLike } from "../lib/types";
 import Link from "next/link";
-import { usePlayerStore } from "stores/PlayerStore";
+import { usePlayerStore } from "@stores/PlayerStore";
 
 const DynamicMenu = dynamic(() => import("../components/Menu"), {
   ssr: false,

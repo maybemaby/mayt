@@ -59,11 +59,13 @@ const Player = ({ onEnd, opts }: PlayerProps) => {
   if (context) {
     return (
       <PlayerContainer>
-        <StyledPlayer
-          videoId={context?.currentVideo?.ytId ?? ""}
-          onEnd={onEnd}
-          opts={opts}
-        />
+        {context?.currentVideo?.ytId && (
+          <StyledPlayer
+            videoId={context.currentVideo.ytId}
+            onEnd={onEnd}
+            opts={opts}
+          />
+        )}
       </PlayerContainer>
     );
   }
@@ -74,7 +76,7 @@ const Player = ({ onEnd, opts }: PlayerProps) => {
 interface ControlsProps {
   handleNext(): void;
   handlePrev(): void;
-  handleSelect(select: {video: Playable, idx: number}): void;
+  handleSelect(select: { video: Playable; idx: number }): void;
 }
 
 const Controls = ({ handleNext, handlePrev, handleSelect }: ControlsProps) => {
