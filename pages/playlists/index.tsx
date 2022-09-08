@@ -76,7 +76,6 @@ const SubmitButton = styled.button`
 const PlaylistPage: NextPage = () => {
   const { open } = useModal();
   const [name, setName] = useState("");
-  const [submissionError, setSubmissionError] = useState("");
   const utils = trpc.useContext();
   const playlists = trpc.useInfiniteQuery(
     ["playlists.find", { orderBy: { createdAt: "desc" } }],
@@ -88,14 +87,17 @@ const PlaylistPage: NextPage = () => {
   );
 
   const addPlaylist = trpc.useMutation(["playlists.create"], {
-    onSuccess() {
+    async onSuccess(data, variables) {
+      const toast = (await import("react-hot-toast")).toast;
+      toast.success(`Added ${variables.name}!`);
       utils.invalidateQueries(["playlists.find"]);
     },
-    onError(e) {
+    async onError(e, variables) {
+      const toast = (await import("react-hot-toast")).toast;
       if (e.message.includes("Entity already exists")) {
-        setSubmissionError("Playlist already exists");
+        toast.error(`Playlist with name: "${variables.name}" already exists`);
       } else {
-        setSubmissionError("Couldn't create playlist");
+        toast.error("Couldn't create playlist");
       }
     },
   });
@@ -109,7 +111,6 @@ const PlaylistPage: NextPage = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmissionError("");
     await addPlaylist.mutateAsync({ name });
   };
 
@@ -126,17 +127,11 @@ const PlaylistPage: NextPage = () => {
             value={name}
             onChange={(e) => setName(e.currentTarget.value)}
           />
-          <SubmitButton type="submit">Submit</SubmitButton>
+          <SubmitButton type="submit" disabled={addPlaylist.isLoading}>
+            Submit
+          </SubmitButton>
           {addPlaylist.isLoading && (
             <div style={{ margin: "auto" }}>Loading</div>
-          )}
-          {addPlaylist.isSuccess && (
-            <div style={{ margin: "auto" }}>Added!</div>
-          )}
-          {submissionError && (
-            <div style={{ margin: "auto", color: "red" }}>
-              {submissionError}
-            </div>
           )}
         </SubmitForm>
       </Modal>
