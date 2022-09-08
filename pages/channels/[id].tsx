@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { trpc } from "../../lib/utils/trpc";
-import VideoPreviewGrid from "../../components/VideoPreviewGrid";
+import { trpc } from "@lib/utils/trpc";
+import VideoPreviewGrid from "@components/VideoPreviewGrid";
 import { useMemo } from "react";
-import BarLoader from "../../components/common/BarLoader";
+import BarLoader from "@components/common/BarLoader";
 
 const Header = styled.section`
   padding: 30px 50px 20px 50px;

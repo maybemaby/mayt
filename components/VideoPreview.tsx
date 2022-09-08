@@ -4,12 +4,18 @@ import Link from "next/link";
 import styled from "styled-components";
 import { trpc } from "../lib/utils/trpc";
 import BaseRow from "./common/BaseRow";
-import Menu from "./Menu";
 import { useModal } from "../hooks/useModal";
+import { usePlayerStore } from "stores/PlayerStore";
+import dynamic from "next/dynamic";
+
+const DynamicMenu = dynamic(() => import("../components/Menu"), {
+  ssr: false,
+  loading: () => <div></div>,
+});
 
 type VideoPreviewProps = {
-  thumbnail_url: string;
-  title: string;
+  thumbnail_url: string | null;
+  name: string;
   channel: string;
   channelId?: string;
 };
@@ -32,13 +38,17 @@ const ImageContainer = styled.div`
   }
 `;
 
-const SmallImageContainer = styled.div`
+const SmallImageContainer = styled.a`
   box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.427);
   position: relative;
   margin-bottom: 20px;
   border-radius: 10px;
   width: 240px;
   aspect-ratio: 4/3;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Container = styled.div`
@@ -108,20 +118,22 @@ const Subtitle = styled.p`
   margin: 0;
 `;
 
-const VideoPreview = ({ thumbnail_url, title, channel }: VideoPreviewProps) => {
+const VideoPreview = ({ thumbnail_url, name, channel }: VideoPreviewProps) => {
   return (
     <Container>
       <ImageContainer>
-        <StyledImage
-          src={thumbnail_url}
-          alt={title}
-          priority
-          layout="fill"
-          objectFit="contain"
-        />
+        {thumbnail_url && (
+          <StyledImage
+            src={thumbnail_url}
+            alt={name}
+            priority
+            layout="fill"
+            objectFit="contain"
+          />
+        )}
       </ImageContainer>
       <Info>
-        <Title>{title}</Title>
+        <Title>{name}</Title>
         <Subtitle>{channel}</Subtitle>
       </Info>
     </Container>
@@ -134,20 +146,23 @@ export const SmallVideoPreview = React.forwardRef(
     {
       id,
       thumbnail_url,
-      title,
+      name,
       channel,
       channelId,
       pinned,
       playlists,
       tags,
+      ytId,
     }: VideoPreviewProps & {
       id: string;
+      ytId: string;
       pinned: boolean;
       playlists: { videoId: string; playlistId: string }[];
       tags: { videoId: string; tagId: string }[];
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
+    const store = usePlayerStore();
     const utils = trpc.useContext();
     const clear = trpc.useMutation("videos.delete", {
       onSuccess(input) {
@@ -218,24 +233,39 @@ export const SmallVideoPreview = React.forwardRef(
 
     return (
       <SmallContainer ref={ref}>
-        <SmallImageContainer>
-          <StyledImage
-            src={thumbnail_url}
-            alt={title}
-            priority
-            layout="fill"
-            objectFit="contain"
-          />
-        </SmallImageContainer>
+        <Link href={"/player"}>
+          <SmallImageContainer
+            onClick={() =>
+              store.addNext({
+                ytId,
+                id,
+                name,
+                channel,
+                channelId,
+              })
+            }
+          >
+            {thumbnail_url && (
+              <StyledImage
+                src={thumbnail_url}
+                alt={name}
+                priority
+                layout="fill"
+                objectFit="contain"
+              />
+            )}
+          </SmallImageContainer>
+        </Link>
+
         <SmallInfo>
-          <SmallTitle title={title}>{title}</SmallTitle>
+          <SmallTitle title={name}>{name}</SmallTitle>
           <BaseRow width={"100%"} justify={"space-between"}>
             <Link href={`/channels/${channelId}`}>
               <a>
                 <Subtitle>{channel}</Subtitle>
               </a>
             </Link>
-            <Menu options={options} onSelect={handleSelect} />
+            <DynamicMenu options={options} onSelect={handleSelect} />
           </BaseRow>
         </SmallInfo>
       </SmallContainer>
