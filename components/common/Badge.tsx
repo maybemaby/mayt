@@ -18,7 +18,7 @@ const Badge = styled.div<BadgeProps>`
   transition: background-color 300ms ease;
 
   &:hover {
-    background: ${(props) => props.theme.color.grey[50]};
+    background: ${(props) => props.theme.color.grey[400]};
   }
 `;
 
@@ -37,8 +37,9 @@ export const ButtonBadge = styled.button<BadgeProps>`
   padding: 5px 10px;
   transition: background-color 300ms ease;
 
-  &:hover {
-    background: ${(props) => props.theme.color.grey[50]};
+  &:hover,
+  &:focus-within {
+    background: ${(props) => props.theme.color.grey[300]};
     cursor: pointer;
   }
 `;

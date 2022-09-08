@@ -2,11 +2,11 @@ import dynamic from "next/dynamic";
 import React, { ForwardedRef } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 import BaseRow from "./common/BaseRow";
 import { trpc } from "../lib/utils/trpc";
 import type { PlaylistLike } from "../lib/types";
 import Link from "next/link";
-import { usePlayerStore } from "@stores/PlayerStore";
 
 const DynamicMenu = dynamic(() => import("../components/Menu"), {
   ssr: false,
@@ -69,10 +69,10 @@ const PlaylistPreview = React.forwardRef(function PlaylistPreview(
   { playlist }: PlaylistPreviewProps,
   ref: ForwardedRef<HTMLDivElement>
 ) {
-  const store = usePlayerStore();
   const utils = trpc.useContext();
   const deletePlaylist = trpc.useMutation(["playlists.deleteOne"], {
     onSuccess() {
+      toast.success("Deleted playlist!");
       utils.invalidateQueries(["playlists.find"]);
     },
   });

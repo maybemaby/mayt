@@ -7,6 +7,7 @@ import BaseRow from "./common/BaseRow";
 import { useModal } from "../hooks/useModal";
 import { usePlayerStore } from "stores/PlayerStore";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
 
 const DynamicMenu = dynamic(() => import("../components/Menu"), {
   ssr: false,
@@ -166,6 +167,7 @@ export const SmallVideoPreview = React.forwardRef(
     const utils = trpc.useContext();
     const clear = trpc.useMutation("videos.delete", {
       onSuccess(input) {
+        toast.success("Deleted!");
         utils.invalidateQueries(["videos.find"]);
         utils.invalidateQueries(["videos.getPinned"]);
         utils.invalidateQueries(["videos.find", { channelId }]);
@@ -173,8 +175,15 @@ export const SmallVideoPreview = React.forwardRef(
     });
     const togglePin = trpc.useMutation("videos.togglePinned", {
       onSuccess(input) {
+        input.pinned
+          ? toast.success(`Pinned ${input.name}`)
+          : toast.success(`Unpinned ${input.name}`);
+
         utils.invalidateQueries(["videos.find"]);
         utils.invalidateQueries(["videos.getPinned"]);
+      },
+      onError(e) {
+        toast.error(`Couldn't pin/unpin`);
       },
     });
 

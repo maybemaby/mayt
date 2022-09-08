@@ -59,6 +59,12 @@ const Form = styled.form`
   padding: 10px 5px;
 `;
 
+const Fixed = styled.div`
+  height: 100px;
+  width: 100%;
+  margin: auto;
+`;
+
 const AddVideoToPlaylist = ({
   videoId,
   playlistsIncluded,
@@ -165,7 +171,11 @@ const AddVideoToPlaylist = ({
             </>
           );
         })}
-      {!playlists.data && <BarLoader />}
+      {!playlists.data && (
+        <Fixed>
+          <BarLoader />
+        </Fixed>
+      )}
       {remove.isError && <div style={{ color: "red" }}>Failed to remove.</div>}
       {add.isError && add.error.message.includes("duplicate") && (
         <div style={{ color: "red" }}>Already in playlist</div>
