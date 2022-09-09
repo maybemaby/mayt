@@ -53,7 +53,7 @@ const ModalContext = createContext<ModalContextProps>({
   open: false,
 });
 
-export const Modal2 = ({ onOpen, onClose, children }: ModalProps) => {
+export const Modal = ({ onOpen, onClose, children }: ModalProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -109,7 +109,7 @@ const Body = ({ className, children }: BodyProps) => {
     <>
       {open && setOpen && (
         <StyledPortal lockBodyScroll={true} target={document.body}>
-          <ModalContainer>
+          <ModalContainer className={className}>
             <StyledIconButton onClick={() => setOpen(false)}>
               <AiOutlineClose size={25} />
             </StyledIconButton>
@@ -121,5 +121,5 @@ const Body = ({ className, children }: BodyProps) => {
   );
 };
 
-Modal2.Button = Button;
-Modal2.Body = Body;
+Modal.Button = Button;
+Modal.Body = Body;
