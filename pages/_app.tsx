@@ -3,7 +3,6 @@ import Head from "next/head";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { lightTheme } from "../theme";
 import ModalProvider from "@components/ModalProvider";
-import PlayerProvider from "@components/PlayerProvider";
 import { WithSidebar } from "@components/layouts/WithSidebar";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "./api/trpc/[trpc]";
@@ -56,13 +55,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyle />
-        <PlayerProvider>
-          <ModalProvider>
-            <WithSidebar>
-              <Component {...pageProps} />
-            </WithSidebar>
-          </ModalProvider>
-        </PlayerProvider>
+        <ModalProvider>
+          <WithSidebar>
+            <Component {...pageProps} />
+          </WithSidebar>
+        </ModalProvider>
       </ThemeProvider>
     </>
   );
