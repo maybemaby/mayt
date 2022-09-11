@@ -142,8 +142,12 @@ const Body = ({ className, children }: BodyProps) => {
   return (
     <>
       {open && setOpen && (
-        <StyledPortal lockBodyScroll={true} target={document.body}>
-          <ModalContainer ref={ref} className={className}>
+        <StyledPortal
+          lockBodyScroll={true}
+          target={document.body}
+          className={"modal-overlay"}
+        >
+          <ModalContainer ref={ref} className={className} aria-modal="true">
             <StyledIconButton id="close-modal" onClick={handleClick}>
               <AiOutlineClose size={25} />
             </StyledIconButton>
