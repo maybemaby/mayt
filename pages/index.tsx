@@ -6,12 +6,8 @@ import { TbPinned, TbTrendingUp } from "react-icons/tb";
 import { SearchBox } from "@components/SearchBox";
 import IconHeader from "@components/common/IconHeader";
 import VideoPreviewRow from "@components/VideoPreviewRow";
-import { trpc } from "@lib/utils/trpc";
 import BarLoader from "@components/common/BarLoader";
-import { useModal } from "@hooks/useModal";
-import Modal from "@components/Modal";
-import AddVideoToPlaylist from "@components/AddVideoToPlaylist";
-import UpdateTagsModal from "@components/UpdateTagsModal";
+import { trpc } from "@lib/utils/trpc";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -51,10 +47,6 @@ const Home: NextPage = () => {
     }
     return [];
   }, [data]);
-  const {
-    videoPlaylist: { videoId, includedPlaylists },
-    tagModal,
-  } = useModal();
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -78,20 +70,6 @@ const Home: NextPage = () => {
         <meta name="description" content="Your personal Youtube organizer" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Modal>
-        {videoId && (
-          <AddVideoToPlaylist
-            videoId={videoId}
-            playlistsIncluded={includedPlaylists ?? []}
-          />
-        )}
-        {tagModal.videoId && (
-          <UpdateTagsModal
-            videoId={tagModal.videoId}
-            existingTags={tagModal.videoTags ?? []}
-          />
-        )}
-      </Modal>
       <SearchBox
         commonStyle={{ margin: "30px 0px" }}
         placeholder="Search by videos by title or channel"

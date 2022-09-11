@@ -1,11 +1,12 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { lightTheme } from "../theme";
-import ModalProvider from "@components/ModalProvider";
-import { WithSidebar } from "@components/layouts/WithSidebar";
 import { withTRPC } from "@trpc/next";
+import { lightTheme } from "../theme";
+import { WithSidebar } from "@components/layouts/WithSidebar";
 import { AppRouter } from "./api/trpc/[trpc]";
+import { Modal } from "@components/common/Modal";
+import { useModalStore } from "@stores/ModalStore";
 import "../base.css";
 
 const GlobalStyle = createGlobalStyle`
@@ -48,6 +49,7 @@ div#__next {
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const modal = useModalStore();
   return (
     <>
       <Head>
@@ -55,11 +57,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyle />
-        <ModalProvider>
-          <WithSidebar>
-            <Component {...pageProps} />
-          </WithSidebar>
-        </ModalProvider>
+        <WithSidebar>
+          {modal.active && (
+            <Modal open={modal.isShowing} onClose={() => modal.close()}>
+              <Modal.Body>
+                <modal.active.Component {...modal.active?.props} />
+              </Modal.Body>
+            </Modal>
+          )}
+          <Component {...pageProps} />
+        </WithSidebar>
       </ThemeProvider>
     </>
   );

@@ -1,12 +1,14 @@
 import React, { ForwardedRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import styled from "styled-components";
 import BaseRow from "./common/BaseRow";
-import { useModal } from "@hooks/useModal";
 import { usePlayerStore } from "stores/PlayerStore";
-import dynamic from "next/dynamic";
 import { useVideoPreview } from "@hooks/useVideoPreview";
+import { useModalStore } from "@stores/ModalStore";
+import AddVideoToPlaylist from "@components/AddVideoToPlaylist";
+import UpdateTagsModal from "@components/UpdateTagsModal";
 
 const DynamicMenu = dynamic(() => import("../components/Menu"), {
   ssr: false,
@@ -164,12 +166,7 @@ export const SmallVideoPreview = React.forwardRef(
   ) => {
     const store = usePlayerStore();
     const { clear, togglePin } = useVideoPreview(channelId);
-
-    const {
-      open,
-      videoPlaylist: { setVideoId, setIncludedPlaylists },
-      tagModal,
-    } = useModal();
+    const modalStore = useModalStore();
 
     const handleSelect = (value: string) => {
       const split = value.split(".");
@@ -184,18 +181,16 @@ export const SmallVideoPreview = React.forwardRef(
           clear.mutate({ id: split[1] });
           break;
         case "playlist":
-          if (setVideoId && setIncludedPlaylists) {
-            setVideoId(split[1]);
-            setIncludedPlaylists(playlists);
-          }
-          open();
+          modalStore.show(AddVideoToPlaylist, {
+            videoId: id,
+            playlistsIncluded: playlists,
+          });
           break;
         case "tag":
-          if (tagModal.setVideoId && tagModal.setVideoTags) {
-            tagModal.setVideoId(split[1]);
-            tagModal.setVideoTags(tags.map((tag) => tag.tagId));
-          }
-          open();
+          modalStore.show(UpdateTagsModal, {
+            videoId: id,
+            existingTags: tags.map((tag) => tag.tagId),
+          });
           break;
         default:
           console.log(split[0]);

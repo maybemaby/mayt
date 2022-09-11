@@ -1,15 +1,11 @@
 import { NextPage } from "next";
 import styled from "styled-components";
+import { useState } from "react";
 import VideoFilterForm from "../../components/VideoFilterForm";
 import VideoPreviewGrid from "../../components/VideoPreviewGrid";
 import BarLoader from "../../components/common/BarLoader";
-import { trpc } from "../../lib/utils/trpc";
-import Modal from "../../components/Modal";
-import AddVideoToPlaylist from "../../components/AddVideoToPlaylist";
-import { useModal } from "../../hooks/useModal";
-import UpdateTagsModal from "../../components/UpdateTagsModal";
-import { VideoForm } from "../../lib/types";
-import { useState } from "react";
+import { trpc } from "@lib/utils/trpc";
+import { VideoForm } from "@lib/types";
 
 const Header = styled.h2`
   font-size: ${(props) => props.theme.fontSize[6]};
@@ -36,10 +32,6 @@ const VideosPage: NextPage = () => {
     }
   );
   const channels = trpc.useQuery(["channels.getChannels", {}]);
-  const {
-    videoPlaylist: { videoId, includedPlaylists },
-    tagModal,
-  } = useModal();
 
   const handleFilter = (values: VideoForm) => {
     console.log(values);
@@ -61,20 +53,6 @@ const VideosPage: NextPage = () => {
   return (
     <>
       <Header>Videos</Header>
-      <Modal>
-        {videoId && (
-          <AddVideoToPlaylist
-            videoId={videoId}
-            playlistsIncluded={includedPlaylists ?? []}
-          />
-        )}
-        {tagModal.videoId && (
-          <UpdateTagsModal
-            videoId={tagModal.videoId}
-            existingTags={tagModal.videoTags ?? []}
-          />
-        )}
-      </Modal>
       <VideoFilterForm
         channels={channels.data ?? []}
         submitHandler={handleFilter}

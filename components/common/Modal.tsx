@@ -3,6 +3,7 @@ import React, {
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { AiOutlineClose } from "react-icons/ai";
@@ -10,11 +11,16 @@ import styled from "styled-components";
 import { Portal } from "./Portal";
 import PopIn from "@components/animations/PopIn";
 import { IconButton } from "./IconButton";
+import useOnClickOutside from "@hooks/useOnClickOutside";
 
 const StyledIconButton = styled(IconButton)`
   position: absolute;
   top: 15px;
   right: 15px;
+
+  &:focus-within {
+    outline: 2px solid ${({ theme }) => theme.color.primary[300]};
+  }
 `;
 
 const ModalContainer = styled.div`
@@ -24,6 +30,11 @@ const ModalContainer = styled.div`
   width: min(400px, 95%);
   border-radius: 10px;
   animation: ${PopIn} 100ms linear;
+
+  @media screen and (min-width: 768px) {
+    padding: 40px;
+    width: fit-content;
+  }
 `;
 
 const StyledPortal = styled(Portal)`
@@ -38,26 +49,41 @@ const StyledPortal = styled(Portal)`
   align-items: center;
 `;
 
-interface ModalProps {
+interface ModalBase {
   onOpen?: () => void;
   onClose?: () => void;
   children?: ReactNode;
 }
 
-interface ModalContextProps extends ModalProps {
+export interface ModalContextProps extends ModalBase {
   open: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface ModalProps extends ModalBase {
+  open?: boolean;
 }
 
 const ModalContext = createContext<ModalContextProps>({
   open: false,
 });
 
-export const Modal = ({ onOpen, onClose, children }: ModalProps) => {
-  const [open, setOpen] = useState(false);
+export const Modal = ({ open, onOpen, onClose, children }: ModalProps) => {
+  const [_open, setOpen] = useState(false);
+
+  if (typeof open !== "undefined") {
+    return (
+      <>
+        <ModalContext.Provider value={{ open, setOpen, onOpen, onClose }}>
+          {children}
+        </ModalContext.Provider>
+      </>
+    );
+  }
+
   return (
     <>
-      <ModalContext.Provider value={{ open, setOpen, onOpen, onClose }}>
+      <ModalContext.Provider value={{ open: _open, setOpen, onOpen, onClose }}>
         {children}
       </ModalContext.Provider>
     </>
@@ -90,27 +116,35 @@ interface BodyProps {
 }
 
 const Body = ({ className, children }: BodyProps) => {
-  const { open, setOpen } = useContext(ModalContext);
+  const { open, setOpen, onClose } = useContext(ModalContext);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      console.log(e.key);
       if (e.key === "Escape" && setOpen) {
         setOpen(false);
+        if (onClose) onClose();
       }
     };
 
     document.body.addEventListener("keydown", handleKeyPress);
 
     return () => document.body.removeEventListener("keydown", handleKeyPress);
-  }, []);
+  }, [setOpen]);
+
+  const handleClick = () => {
+    if (setOpen) setOpen(false);
+    if (onClose) onClose();
+  };
+
+  useOnClickOutside(ref, () => handleClick());
 
   return (
     <>
       {open && setOpen && (
         <StyledPortal lockBodyScroll={true} target={document.body}>
-          <ModalContainer className={className}>
-            <StyledIconButton onClick={() => setOpen(false)}>
+          <ModalContainer ref={ref} className={className}>
+            <StyledIconButton id="close-modal" onClick={handleClick}>
               <AiOutlineClose size={25} />
             </StyledIconButton>
             {children}
