@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import type { ToasterProps } from "react-hot-toast";
 import { AppSidebar } from "../AppSidebar";
 import { AppHeader } from "../AppHeader";
-import { useModal } from "../../hooks/useModal";
-import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 
 const DynamicToaster = dynamic<ToasterProps>(
   () => import("react-hot-toast").then((mod) => mod.Toaster),
@@ -20,7 +19,6 @@ type WithSidebarProps = {
 
 const Main = styled.main`
   margin-left: 0;
-  /* margin-top: 100px; */
   transition: all 200ms ease;
   display: flex;
   flex-direction: column;
@@ -35,7 +33,6 @@ const Main = styled.main`
 `;
 
 export const WithSidebar = ({ children }: WithSidebarProps) => {
-  const { close } = useModal();
   const { route } = useRouter();
   const [showSideBar, setShowSidebar] = useState(false);
   const sidebarCloser = () => {
@@ -43,9 +40,8 @@ export const WithSidebar = ({ children }: WithSidebarProps) => {
   };
 
   useEffect(() => {
-    close();
     setShowSidebar(false);
-  }, [route, close]);
+  }, [route]);
 
   return (
     <>

@@ -19,7 +19,9 @@ const testOptions = [
   },
 ];
 
-const selectHandler = (value: string) => console.log(value);
+const selectHandler = (value: string) => {
+  return value;
+};
 
 describe("Menu", () => {
   test("Loads without popup", async () => {

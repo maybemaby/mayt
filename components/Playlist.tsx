@@ -5,7 +5,7 @@ import {
   BsFillSkipBackwardFill,
   BsFillSkipForwardFill,
 } from "react-icons/bs";
-import type { Playable } from "../lib/types/Playable";
+import type { Playable } from "@lib/types/Playable";
 import { IconButton } from "./common/IconButton";
 
 const Container = styled.ul`

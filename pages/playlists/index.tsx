@@ -2,12 +2,10 @@ import { NextPage } from "next";
 import { FormEvent, useMemo, useState } from "react";
 import styled from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useModal } from "@hooks/useModal";
 import BarLoader from "@components/common/BarLoader";
-import { IconButton } from "@components/common/IconButton";
 import PlaylistPreviewGrid from "@components/PlaylistPreviewGrid";
+import { Modal } from "@components/common/Modal";
 import { trpc } from "@lib/utils/trpc";
-import Modal from "@components/Modal";
 
 const Page = styled.section`
   margin: 30px;
@@ -18,7 +16,11 @@ const Header = styled.h2`
   font-weight: ${(props) => props.theme.fontWeights.title};
 `;
 
-const StyledIconButton = styled(IconButton)`
+const StyledIconButton = styled(Modal.Button)`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
   font-family: inherit;
   background-color: transparent;
   font-size: 1.2rem;
@@ -72,9 +74,7 @@ const SubmitButton = styled.button`
   padding: 0;
   margin-top: 10px;
 `;
-
 const PlaylistPage: NextPage = () => {
-  const { open } = useModal();
   const [name, setName] = useState("");
   const utils = trpc.useContext();
   const playlists = trpc.useInfiniteQuery(
@@ -118,27 +118,29 @@ const PlaylistPage: NextPage = () => {
     <Page id="playlist-page">
       <Header>Playlists</Header>
       <Modal>
-        <SubmitForm onSubmit={handleSubmit}>
-          <label htmlFor="name">Playlist Name</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.currentTarget.value)}
-          />
-          <SubmitButton type="submit" disabled={addPlaylist.isLoading}>
-            Submit
-          </SubmitButton>
-          {addPlaylist.isLoading && (
-            <div style={{ margin: "auto" }}>Loading</div>
-          )}
-        </SubmitForm>
+        <StyledIconButton>
+          <AiOutlinePlus size={25} />
+          Add Playlist
+        </StyledIconButton>
+        <Modal.Body>
+          <SubmitForm onSubmit={handleSubmit}>
+            <label htmlFor="name">Playlist Name</label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.currentTarget.value)}
+            />
+            <SubmitButton type="submit" disabled={addPlaylist.isLoading}>
+              Submit
+            </SubmitButton>
+            {addPlaylist.isLoading && (
+              <div style={{ margin: "auto" }}>Loading</div>
+            )}
+          </SubmitForm>
+        </Modal.Body>
       </Modal>
-      <StyledIconButton onClick={() => open()}>
-        <AiOutlinePlus size={25} />
-        New Playlist
-      </StyledIconButton>
       {playlists.isSuccess &&
       playlists.data &&
       playlists.isFetchedAfterMount ? (
