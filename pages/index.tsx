@@ -8,6 +8,7 @@ import IconHeader from "@components/common/IconHeader";
 import VideoPreviewRow from "@components/VideoPreviewRow";
 import BarLoader from "@components/common/BarLoader";
 import { trpc } from "@lib/utils/trpc";
+import { useFrontpageFetch } from "@hooks/useFrontpageFetch";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -56,12 +57,7 @@ const Home: NextPage = () => {
     console.log(value, "clicked");
   };
 
-  const latest = trpc.useQuery(["videos.find", { size: 20 }], {
-    staleTime: 60,
-  });
-  const pinned = trpc.useQuery(["videos.getPinned", {}], {
-    staleTime: 60,
-  });
+  const { latest, pinned } = useFrontpageFetch();
 
   return (
     <>
