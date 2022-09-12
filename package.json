@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "dotenv -e .env.test -- jest --watch",
-    "test:components":  "jest components --watch",
+    "test:components": "jest components --watch",
     "test:db-up": "docker run --name testmaytdb -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=testmaytdb -p 5432:5432 postgres",
     "test:db-push": "dotenv -e .env.test -- primsa db push",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
@@ -36,6 +36,7 @@
     "react-popper": "^2.3.0",
     "react-query": "^3.39.2",
     "react-youtube": "^9.0.3",
+    "sharp": "^0.31.0",
     "styled-components": "^5.3.5",
     "zod": "^3.17.10",
     "zustand": "^4.1.1"

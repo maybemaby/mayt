@@ -84,6 +84,7 @@ const Home: NextPage = () => {
           videos={pinned.data ?? []}
           id={"Pinned"}
           flexWrap={false}
+          prioritize={[0, 1]}
         />
       </PinnedContent>
       <SecondaryContent>

@@ -1,6 +1,6 @@
 import { useInView } from "react-intersection-observer";
-import type { PlaylistLike } from "../lib/types";
-import type { CommonStyle } from "../lib/types/CommonStyle";
+import type { PlaylistLike } from "@lib/types";
+import type { CommonStyle } from "@lib/types/CommonStyle";
 
 import PlaylistPreview from "./PlaylistPreview";
 import BaseGrid from "./common/BaseGrid";

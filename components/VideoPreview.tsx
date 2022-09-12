@@ -1,4 +1,4 @@
-import React, { ForwardedRef } from "react";
+import React, { ForwardedRef, RefObject, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -155,18 +155,26 @@ export const SmallVideoPreview = React.forwardRef(
       playlists,
       tags,
       ytId,
+      getContainerRef,
+      prioritize,
     }: VideoPreviewProps & {
       id: string;
+      prioritize?: boolean;
       ytId: string;
       pinned: boolean;
       playlists: { videoId: string; playlistId: string }[];
       tags: { videoId: string; tagId: string }[];
+      getContainerRef?: () => RefObject<HTMLElement | null>;
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const store = usePlayerStore();
     const { clear, togglePin } = useVideoPreview(channelId);
     const modalStore = useModalStore();
+    const [containerRef, setContainerRef] =
+      useState<RefObject<HTMLElement | null> | null>(() => {
+        return getContainerRef ? getContainerRef() : null;
+      });
 
     const handleSelect = (value: string) => {
       const split = value.split(".");
@@ -227,15 +235,27 @@ export const SmallVideoPreview = React.forwardRef(
               })
             }
           >
-            {thumbnail_url && (
-              <StyledImage
-                src={thumbnail_url}
-                alt={name}
-                priority
-                layout="fill"
-                objectFit="contain"
-              />
-            )}
+            {thumbnail_url &&
+              (containerRef && containerRef.current ? (
+                <StyledImage
+                  src={thumbnail_url}
+                  alt={name}
+                  priority={prioritize}
+                  layout="fill"
+                  objectFit="contain"
+                  lazyBoundary={"20px"}
+                  lazyRoot={containerRef as RefObject<HTMLElement>}
+                />
+              ) : (
+                <StyledImage
+                  src={thumbnail_url}
+                  alt={name}
+                  priority={prioritize}
+                  layout="fill"
+                  objectFit="contain"
+                  lazyBoundary={"20px"}
+                />
+              ))}
           </SmallImageContainer>
         </Link>
 

@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import type { VideoFindReturn } from "../lib/types";
-import type { CommonStyle } from "../lib/types/CommonStyle";
+import type { VideoFindReturn } from "@lib/types";
+import type { CommonStyle } from "@lib/types/CommonStyle";
 import { SmallVideoPreview } from "./VideoPreview";
 import BarLoader from "./common/BarLoader";
-import { Unpacked } from "../lib/types/Unpacked";
+import { Unpacked } from "@lib/types/Unpacked";
+import { useRef } from "react";
 
 const Section = styled.section<CommonStyle>`
   padding: ${(props) => props.padding};
@@ -44,15 +45,23 @@ type VideoPreviewRowProps<TVideo extends Unpacked<VideoFindReturn["videos"]>> =
     loading?: boolean;
     commonStyle?: CommonStyle;
     flexWrap?: boolean;
+    prioritize?: number[];
   };
 
+// prioritize is a list of indexes to prioritize image loads for.
 function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
   id,
   videos,
   commonStyle,
   flexWrap,
   loading,
+  prioritize = [],
 }: VideoPreviewRowProps<T>) {
+  const rowRef = useRef<HTMLDivElement | null>(null);
+
+  const getRow = () => {
+    return rowRef;
+  };
   return (
     <Section id={id} {...commonStyle}>
       {loading === true && (
@@ -61,8 +70,8 @@ function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
         </div>
       )}
       {videos.length === 0 && !loading && <div>No Videos Found</div>}
-      <Row flexWrap={flexWrap}>
-        {videos.map((video) => (
+      <Row ref={rowRef} flexWrap={flexWrap}>
+        {videos.map((video, index) => (
           <SmallVideoPreview
             key={video.id}
             id={video.id}
@@ -74,6 +83,8 @@ function VideoPreviewRow<T extends Unpacked<VideoFindReturn["videos"]>>({
             pinned={video.pinned ?? false}
             playlists={video.videoPlaylist}
             tags={video.VideoTag}
+            getContainerRef={getRow}
+            prioritize={index in prioritize}
           />
         ))}
       </Row>
