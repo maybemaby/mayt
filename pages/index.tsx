@@ -9,6 +9,7 @@ import VideoPreviewRow from "@components/VideoPreviewRow";
 import BarLoader from "@components/common/BarLoader";
 import { trpc } from "@lib/utils/trpc";
 import { useFrontpageFetch } from "@hooks/useFrontpageFetch";
+import { useRouter } from "next/router";
 
 const PinnedContent = styled.div`
   width: 100%;
@@ -35,6 +36,7 @@ const StyledIconHeader = styled(IconHeader)`
 `;
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const [searchValue, setSearchValue] = useState("");
   const { isLoading, data } = trpc.useQuery(
     ["videos.search", { q: searchValue }],
@@ -54,7 +56,7 @@ const Home: NextPage = () => {
   };
 
   const handleSelect = (value: string) => {
-    console.log(value, "clicked");
+    router.push(`/player?v=${value}`);
   };
 
   const { latest, pinned } = useFrontpageFetch();

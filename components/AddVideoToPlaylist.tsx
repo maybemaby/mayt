@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { trpc } from "../lib/utils/trpc";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, Fragment, useMemo, useState } from "react";
 import RaisedBlockButton from "./common/RaisedBlockButton";
 import BaseTextInput from "./common/BaseTextInput";
 import BarLoader from "./common/BarLoader";
@@ -148,7 +148,7 @@ const AddVideoToPlaylist = ({
       {playlists.data &&
         playlists.data.playlists.map((pl) => {
           return (
-            <>
+            <Fragment key={pl.id}>
               {inPlaylists.includes(pl.id) ? (
                 <SelectButton
                   key={pl.id}
@@ -168,7 +168,7 @@ const AddVideoToPlaylist = ({
                   <Label>{pl.name}</Label>
                 </SelectButton>
               )}
-            </>
+            </Fragment>
           );
         })}
       {!playlists.data && (

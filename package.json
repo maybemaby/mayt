@@ -13,7 +13,7 @@
     "test": "dotenv -e .env.test -- jest --watch",
     "test:components": "jest components --watch",
     "test:db-up": "docker run --name testmaytdb -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=testmaytdb -p 5432:5432 postgres",
-    "test:db-push": "dotenv -e .env.test -- primsa db push",
+    "test:db-push": "dotenv -e .env.test -- prisma db push",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
