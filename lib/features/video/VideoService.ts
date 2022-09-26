@@ -238,6 +238,7 @@ async function getOne(id: string) {
           },
         },
       },
+      channel: true,
       videoPlaylist: true,
     },
   });
