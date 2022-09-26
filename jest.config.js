@@ -17,6 +17,7 @@ const customJestConfig = {
     "^@lib(.*)$": "<rootDir>/lib/$1",
     "^@hooks(.*)$": "<rootDir>/hooks/$1",
   },
+  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
